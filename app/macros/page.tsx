@@ -117,7 +117,16 @@ export default function MacrosPage() {
             <CardTitle>Today&apos;s Macros</CardTitle>
           </CardHeader>
           <CardContent>
-            <MacroForm initialData={todaysMacros || undefined} onSuccess={handleMacroSaved} />
+            <MacroForm
+              initialData={todaysMacros ? {
+                calories: todaysMacros.calories,
+                protein: todaysMacros.protein,
+                carbs: todaysMacros.carbs,
+                fats: todaysMacros.fats,
+                notes: todaysMacros.notes || undefined
+              } : undefined}
+              onSuccess={handleMacroSaved}
+            />
           </CardContent>
         </Card>
 

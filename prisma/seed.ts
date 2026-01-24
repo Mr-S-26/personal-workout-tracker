@@ -210,7 +210,7 @@ function parseGymExercises(content: string, startOrder: number): ParsedExercise[
       order: order++,
       targetSets,
       targetReps,
-      targetWeight,
+      targetWeight: targetWeight || undefined,
     });
   }
 
