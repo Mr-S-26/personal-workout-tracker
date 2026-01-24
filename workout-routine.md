@@ -1,0 +1,452 @@
+# COMPLETE 5-DAY WORKOUT ROUTINE
+## Basketball Performance + Aesthetics + Strength Foundation
+
+**Program Duration:** 12 weeks (Weeks 1-4 detailed below)
+
+**Program Philosophy:**
+- Weeks 1-4: Build movement patterns, aerobic base, and work capacity
+- Weeks 5-8: Increase load, add hypertrophy volume
+- Weeks 9-12: Peak strength and conditioning
+
+---
+
+## DAILY WARM-UP (EVERY TRAINING DAY) - 10 MINUTES
+
+**Do this before EVERY workout**
+
+### Minutes 1-3: Dynamic Mobility
+- Arm circles: 20 forward, 20 backward
+- Leg swings: 10 each leg (front/back, side/side)
+- Hip circles: 10 each direction
+- Cat-cow stretches (if Monday/Wednesday)
+- Band pull-aparts: 2 x 20 (if Tuesday)
+
+### Minutes 4-6: Ball Handling - Stationary Control
+1. Right hand ankle pounds (fingertips): 15 sec
+2. Right hand knee pounds: 15 sec
+3. Right hand waist pounds: 15 sec
+4. Left hand ankle pounds: 15 sec
+5. Left hand knee pounds: 15 sec
+6. Left hand waist pounds: 15 sec
+7. V-dribble (right hand): 15 sec
+8. V-dribble (left hand): 15 sec
+
+### Minutes 7-9: Ball Handling - Stationary Moves
+1. Front crossover: 15 reps
+2. Between-the-legs: 15 reps
+3. Behind-the-back: 15 reps
+4. Combo (crossover → between legs → behind back): 15 sec continuous
+
+### Minute 10: Shooting Prep
+- Jump rope: 2 x 1 min (or jumping jacks) - Monday/Wednesday/Thursday
+- 10 air shots (shooting motion) - All days
+- Ready to train
+
+---
+
+## MONDAY - UPPER BODY PUSH + LOWER BODY POWER
+
+**Total Session Time: ~105 minutes**
+
+### UPPER BODY - Chest/Shoulders/Triceps (40 min)
+
+1. **Push-up Progression** - 5 sets
+   - Week 1-2: Regular push-ups to failure (aim for 8-12 reps)
+   - If you can't get 8, do knee push-ups for 12 reps
+   - Rest 90 sec between sets
+
+2. **Dumbbell Bench Press** - 4 x 10-12
+   - Start with 10kg dumbbells each hand
+   - Focus: Control down (3 sec), explode up
+   - Rest 90 sec
+
+3. **Dumbbell Shoulder Press** - 4 x 10
+   - Start with 7-8kg dumbbells each hand
+   - Strict form, no leg drive
+   - Rest 90 sec
+
+4. **Incline Dumbbell Press** - 3 x 12
+   - 8-10kg dumbbells
+   - Focus on upper chest squeeze
+
+5. **Tricep Dips (Assisted if needed)** - 3 x 8-10
+   - Use dip machine or band assistance if necessary
+   - Or bench dips with feet elevated
+
+6. **Lateral Raises** - 3 x 15
+   - 3-5kg dumbbells (light weight, strict form)
+
+### LOWER BODY - Explosive Power (25 min)
+
+1. **Goblet Squats** - 4 x 10
+   - Week 1-2: 20kg
+   - Week 3-4: 24kg
+   - Focus: Explode up, control down
+
+2. **Box Jumps (Low Box)** - 4 x 5
+   - Start with 12-16" box
+   - Focus: Soft landing, full hip extension at top
+   - Rest 90 sec between sets
+
+3. **Jumping Lunges** - 3 x 8 each leg
+   - Bodyweight only
+   - Explosive switch
+
+4. **Wall Sit** - 3 x 45 sec
+   - Builds quad endurance for shooting
+
+### BALL HANDLING - Movement Drills (5 min)
+
+**Full court or 20 feet back and forth:**
+1. Speed dribble (right hand): 2 trips
+2. Speed dribble (left hand): 2 trips
+3. Zigzag crossovers: 2 trips
+4. Retreat dribble: 2 trips
+
+### SHOOTING - Form Work (20 min)
+
+**Weeks 1-2 (Max distance: 12 feet):**
+1. **Form shooting (5 feet)**: 50 makes
+2. **Spot shooting (5 spots at 10 feet)**: 10 makes each spot (50 total)
+3. Focus: Consistent knee bend, same release point every time
+
+**Weeks 3-4 (Max distance: 17 feet):**
+1. **Form shooting (5 feet)**: 30 makes
+2. **Spot shooting (5 spots at 12-15 feet)**: 10 makes each spot (50 total)
+3. **Free throw line**: 20 makes
+
+### Core Finisher (5 min)
+- Plank: 3 x 30-45 sec
+- Lying leg raises: 3 x 12
+
+---
+
+## TUESDAY - BACK/BICEPS + AEROBIC CONDITIONING
+
+**Total Session Time: ~105 minutes**
+
+### UPPER BODY - Back/Biceps (45 min)
+
+**PRIORITY: Building Pull-up Strength**
+
+1. **Assisted Pull-ups or Negative Pull-ups** - 5 sets
+   - Option A: Use assisted pull-up machine (start with 40-45kg assistance)
+   - Option B: Negative pull-ups (jump up, lower yourself slowly for 5 seconds) - 5 reps per set
+   - Rest 2 min between sets
+   - Goal: Get to 5 strict pull-ups in 12 weeks
+
+2. **Lat Pulldown** - 4 x 10-12
+   - Start with 30-35kg
+   - Wide grip, pull to chest
+   - Squeeze shoulder blades together
+
+3. **Dumbbell Rows** - 4 x 12 each arm
+   - 12-15kg dumbbells
+   - Pull elbow past torso, squeeze back
+
+4. **Seated Cable Rows** - 4 x 12
+   - 30kg starting weight
+   - Pull to lower chest/upper abs
+
+5. **Face Pulls** - 3 x 15
+   - 15-20kg on cable
+   - Pull to face, external rotation at end
+
+6. **Dumbbell Bicep Curls** - 4 x 12
+   - 8-10kg dumbbells
+   - Strict form, no swinging
+
+7. **Hammer Curls** - 3 x 12
+   - 8-10kg dumbbells
+   - Builds brachialis (arm thickness)
+
+### BASKETBALL AEROBIC CONDITIONING (30 min)
+
+**Your #1 weakness - we're fixing this systematically**
+
+**Block 1: Continuous Movement (15 min)**
+- Full-court layup lines at **60% pace** (not sprinting)
+- 3 min continuous → Rest 2 min → Repeat 3x
+- Focus: Maintain consistent pace, don't blow out
+
+**Block 2: Tempo Work (15 min)**
+- Baseline to baseline jog (70% effort)
+- 10 reps with 30 sec rest between
+- This builds your aerobic engine
+
+### SHOOTING - Under Light Fatigue (15 min)
+
+**Weeks 1-2 (Max distance: 12 feet):**
+- Catch-and-shoot from 5 spots (10 feet): 60 total makes
+- You should be breathing moderately hard but not gasping
+
+**Weeks 3-4 (Max distance: 17 feet):**
+- Catch-and-shoot from 5 spots (12-15 feet): 60 total makes
+
+### Core (5 min)
+- Russian twists: 3 x 20
+- Dead bugs: 3 x 10
+
+---
+
+## WEDNESDAY - LEGS/ABS + VERTICAL JUMP TRAINING
+
+**Total Session Time: ~125 minutes**
+
+### LOWER BODY STRENGTH (45 min)
+
+1. **Trap Bar Deadlift (or Dumbbell Deadlift)** - 4 x 8
+   - Week 1-2: 30kg total (trap bar) or 12kg dumbbells each hand
+   - Week 3-4: 35-40kg
+   - Focus: Hip hinge pattern, flat back
+   - Rest 2 min
+
+2. **Goblet Squats** - 4 x 10
+   - 20-24kg
+   - Tempo: 3 sec down, explode up
+   - Rest 90 sec
+
+3. **Bulgarian Split Squats** - 3 x 10 each leg
+   - Bodyweight first 2 weeks
+   - Weeks 3-4: Hold 8-10kg dumbbell
+   - Back foot on bench, front leg does the work
+
+4. **Romanian Deadlifts (RDL)** - 3 x 12
+   - 20-25kg barbell or 10kg dumbbells each hand
+   - Hamstring stretch at bottom
+   - Builds posterior chain for vertical jump
+
+5. **Jump Squats (Bodyweight)** - 4 x 8
+   - Explode up as high as possible
+   - Soft landing
+   - Rest 90 sec
+
+6. **Single-Leg Calf Raises** - 3 x 15 each leg
+   - Bodyweight on step
+   - Full range of motion
+
+### ABS - Direct Work (15 min)
+
+1. **Lying Leg Raises** - 4 x 12
+2. **Bicycle Crunches** - 3 x 20
+3. **Plank** - 3 x 45 sec
+4. **Side Plank** - 2 x 30 sec each side
+
+### BALL HANDLING - Game Speed (5 min)
+
+**The Gauntlet (repeat 4 times down court):**
+1. Speed dribble forward
+2. Crossover
+3. Between-the-legs
+4. Hesitation
+5. Behind-the-back
+6. Explode to finish (imaginary layup)
+
+**Key: FULL GAME SPEED**
+
+### Vertical Jump Practice (10 min)
+
+- Max effort vertical jumps: 5 attempts
+- Approach jumps (1-2 steps): 5 attempts
+- **Record your best** - test weekly to track progress
+
+### SHOOTING - Movement Quality (15 min)
+
+**Weeks 1-2 (Max distance: 12 feet):**
+- Off-the-dribble shots from 3 spots (10 feet): 50 total makes
+- Focus: Loading into shot with tired legs
+
+**Weeks 3-4 (Max distance: 17 feet):**
+- Off-the-dribble shots from 3 spots (12-15 feet): 50 total makes
+
+---
+
+## THURSDAY - FULL BODY CONDITIONING + GAME SIMULATION
+
+**Total Session Time: ~95 minutes**
+
+**This day is CRITICAL for your 5-minute cardio problem**
+
+### FULL BODY METABOLIC CIRCUIT (30 min)
+
+**Circuit (Repeat 4 rounds):**
+1. **Kettlebell Swings (or Dumbbell)** - 15 reps (12-16kg)
+2. **Push-ups** - 10 reps
+3. **Goblet Squats** - 12 reps (16kg)
+4. **Dumbbell Rows** - 10 each arm (10kg)
+5. **Jumping Jacks** - 30 reps
+6. **Plank Hold** - 30 sec
+
+Rest 90-120 sec between rounds
+
+### BASKETBALL HIGH-INTENSITY INTERVALS (35 min)
+
+**Block 1 - Building Your Engine (20 min):**
+- **Work: 45 sec** continuous movement (dribbling, layups, defensive slides)
+- **Rest: 90 sec** active recovery (walking)
+- Repeat 8 rounds
+- This work:rest ratio will improve your conditioning fast
+
+**Block 2 - Game Simulation (15 min):**
+- **2 min continuous:** Attack rim → rebound → dribble out → shoot mid-range → repeat
+- **Rest: 2 min**
+- Repeat 3x
+- **Shooting during this:** Track makes vs attempts
+
+### BALL HANDLING - Under Fatigue (5 min)
+
+**While breathing hard from conditioning:**
+1. Stationary pounds (both hands): 30 sec
+2. Crossovers: 20 reps
+3. Between-legs: 20 reps
+4. Behind-back: 20 reps
+5. Combo moves: 90 sec continuous
+
+**This builds handles under game fatigue**
+
+### SHOOTING - Fatigue Test (10 min)
+
+**After Block 2, immediately:**
+- Shoot 20 free throws
+- Track your percentage - goal is 70%+ even when exhausted
+
+### Core Finisher (5 min)
+- Hanging knee raises: 3 x 10 (or lying if you can't hang)
+- Pallof press: 3 x 10 each side
+
+---
+
+## FRIDAY - ARMS + RECOVERY + HIGH-VOLUME SHOOTING
+
+**Total Session Time: ~113 minutes**
+
+### ARMS SPECIALIZATION (40 min)
+
+**Superset 1 (4 rounds):**
+1. **EZ Bar Curls** - 12 reps (15-20kg bar)
+2. **Tricep Rope Pushdowns** - 15 reps (20kg)
+   - Rest 60 sec between supersets
+
+**Superset 2 (4 rounds):**
+3. **Dumbbell Hammer Curls** - 12 reps (8-10kg)
+4. **Overhead Dumbbell Tricep Extension** - 12 reps (10-12kg)
+   - Rest 60 sec
+
+**Superset 3 (3 rounds):**
+5. **Cable Curls** - 15 reps (15kg)
+6. **Diamond Push-ups** - max reps (aim for 10+)
+   - Rest 60 sec
+
+**Giant Set Finisher (2 rounds):**
+7. **Dumbbell Concentration Curls** - 12 each arm (8kg)
+8. **Bench Dips** - 15 reps
+9. **Dumbbell Curls (both arms)** - 10 reps (lighter weight, 5-6kg)
+10. **Close-Grip Push-ups** - max reps
+
+### MOBILITY & FOAM ROLLING (15 min)
+
+- Full body stretching
+- Foam roll: quads, hamstrings, back, calves
+- Hip mobility work
+
+### BALL HANDLING - Full Routine (8 min)
+
+**Complete sequence:**
+
+**Stationary Control (3 min):**
+- All the pounds progression (ankle → knee → waist)
+- V-dribbles, in-and-outs
+- Both hands equally
+
+**Stationary Moves (2 min):**
+- Crossovers, between-legs, behind-back
+- Combo work
+
+**Movement Drills (3 min):**
+- Speed dribble (both hands)
+- Hesitation moves
+- Zigzag patterns
+- Retreat dribbles
+
+### HIGH-VOLUME SHOOTING - SKILL DAY (45 min)
+
+**No conditioning stress, pure form restoration**
+
+**THIS IS THE MOST IMPORTANT SHOOTING SESSION OF THE WEEK**
+
+**Weeks 1-2 (Max distance: 12 feet):**
+1. **Form shooting (5 feet)**: 100 makes
+2. **Spot shooting (5 spots at 10 feet)**: 150 makes total (30 from each spot)
+3. **Free throws**: 50 attempts (track %)
+4. **Game shots (moving to spots at 10-12 feet)**: 50 makes
+
+**Total: 350 makes**
+
+**Weeks 3-4 (Max distance: 17 feet):**
+1. **Form shooting (5 feet)**: 50 makes
+2. **Mid-range spots (12-15 feet)**: 150 makes (5 spots, 30 each)
+3. **Free throws**: 50 attempts
+4. **Extended mid-range (17 feet)**: 25 makes
+
+**Total: 275 makes**
+
+**Weeks 5-6 (Introduce three-pointers - LIMITED):**
+1. **Form shooting (5 feet)**: 50 makes
+2. **Mid-range (12-15 feet)**: 100 makes
+3. **Three-pointers**: **25 MAKES** (5 spots, 5 makes each)
+   - Quality over quantity
+   - If form breaks, move back to mid-range
+4. **Free throws**: 50 attempts
+
+**Total: 225 makes**
+
+**Weeks 7-8+ (Full range shooter):**
+1. **Form shooting (5 feet)**: 25 makes
+2. **Mid-range**: 75 makes
+3. **Three-pointers**: 50 makes
+4. **Game shots (mix)**: 50 makes
+
+**Total: 200 makes**
+
+### Visualization (5 min)
+- Sit quietly
+- Visualize perfect shooting form
+- Mental rehearsal
+
+---
+
+## WEEKEND - COMPLETE REST
+
+### SATURDAY & SUNDAY: ZERO STRUCTURED TRAINING
+
+**Why rest is non-negotiable:**
+- You're training hard 5 days/week
+- Only getting 6 hours of sleep (recovery already compromised)
+- Muscles grow during REST, not during training
+- Prevents overtraining and injury
+
+**What you CAN do:**
+- Light walking (30 min)
+- Stretching or yoga (20 min)
+- Play casually with friends (low intensity, for fun)
+- Meal prep for next week
+- Watch film (NBA games, study shooting form, ball handling)
+- Foam rolling
+- Sauna if available
+
+**What you CANNOT do:**
+- Structured workouts
+- Pickup games (save for your weekly game, schedule it smart)
+- "Just a quick shooting session" (NO - rest means rest)
+
+---
+
+## NUTRITION FOR 73KG BEGINNER
+
+### Daily Macros
+
+**Calories:** 2,400-2,500 (slight surplus for muscle growth + performance)
+
+**Protein:** 145-160g (2g per kg bodyweight)  
+**Carbs:** 280-300g (fuel for basketball + training)  
+**Fats:** 60-70g (hormones, recovery)

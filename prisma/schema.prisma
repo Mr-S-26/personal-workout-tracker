@@ -1,0 +1,113 @@
+// This is your Prisma schema file
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Workout {
+  id          Int        @id @default(autoincrement())
+  name        String
+  date        DateTime   @default(now())
+  notes       String?
+  duration    Int?       // minutes, calculated on completion
+  templateId  Int?
+  template    WorkoutTemplate? @relation(fields: [templateId], references: [id])
+  exercises   Exercise[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([date])
+  @@index([templateId])
+}
+
+model Exercise {
+  id           Int      @id @default(autoincrement())
+  workoutId    Int
+  workout      Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  name         String
+  order        Int
+  targetSets   Int      @default(3)
+  targetReps   String   @default("10")
+  targetWeight String?
+  notes        String?
+  sets         Set[]
+  createdAt    DateTime @default(now())
+
+  @@index([workoutId])
+}
+
+model Set {
+  id         Int      @id @default(autoincrement())
+  exerciseId Int
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  setNumber  Int
+  reps       Int?     // optional - might not complete
+  weight     Float?   // optional - bodyweight exercises
+  rpe        Int?     // Rate of Perceived Exertion (1-10)
+  restTime   Int?     // actual rest taken in seconds
+  completed  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([exerciseId])
+}
+
+model MacroLog {
+  id        Int      @id @default(autoincrement())
+  date      DateTime @unique  // prevent duplicate logs for same day
+  calories  Int
+  protein   Float
+  carbs     Float
+  fats      Float
+  notes     String?
+  createdAt DateTime @default(now())
+
+  @@index([date])
+}
+
+model WorkoutTemplate {
+  id          Int                @id @default(autoincrement())
+  name        String
+  description String?
+  category    String?            // e.g., "Monday", "Upper Body", etc.
+  exercises   TemplateExercise[]
+  workouts    Workout[]
+  createdAt   DateTime          @default(now())
+}
+
+model TemplateExercise {
+  id           Int             @id @default(autoincrement())
+  templateId   Int
+  template     WorkoutTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  name         String
+  order        Int
+  targetSets   Int
+  targetReps   String          // e.g., "10-12" or "8"
+  targetWeight String?         // e.g., "20kg" or "bodyweight"
+  notes        String?
+
+  @@index([templateId])
+}
+
+model PersonalRecord {
+  id           Int      @id @default(autoincrement())
+  exerciseName String
+  weight       Float
+  reps         Int
+  date         DateTime
+  workoutId    Int?
+  createdAt    DateTime @default(now())
+
+  @@unique([exerciseName, weight, reps])
+  @@index([exerciseName])
+}
+
+model RestTimerPreset {
+  id       Int    @id @default(autoincrement())
+  name     String
+  duration Int    // seconds
+  order    Int    @default(0)
+}
