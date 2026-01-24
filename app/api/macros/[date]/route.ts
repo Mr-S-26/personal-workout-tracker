@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// GET /api/macros/[date] - Get macro log for specific date
+// GET /api/macros/[date] - Get all meals for specific date
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ date: string }> }
@@ -9,52 +9,30 @@ export async function GET(
   try {
     const { date } = await params;
 
-    // Normalize date to start of day
-    const normalizedDate = new Date(date);
-    normalizedDate.setHours(0, 0, 0, 0);
+    // Normalize date to start and end of day
+    const startDate = new Date(date);
+    startDate.setHours(0, 0, 0, 0);
 
-    const macroLog = await prisma.macroLog.findUnique({
-      where: { date: normalizedDate },
+    const endDate = new Date(date);
+    endDate.setHours(23, 59, 59, 999);
+
+    const meals = await prisma.macroLog.findMany({
+      where: {
+        date: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+      orderBy: [
+        { time: 'asc' }
+      ],
     });
 
-    if (!macroLog) {
-      return NextResponse.json(
-        { error: 'Macro log not found for this date', success: false },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({ data: macroLog, success: true });
+    return NextResponse.json({ data: meals, success: true });
   } catch (error) {
-    console.error('Error fetching macro log:', error);
+    console.error('Error fetching meals:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch macro log', success: false },
-      { status: 500 }
-    );
-  }
-}
-
-// DELETE /api/macros/[date] - Delete macro log for specific date
-export async function DELETE(
-  request: Request,
-  { params }: { params: Promise<{ date: string }> }
-) {
-  try {
-    const { date } = await params;
-
-    // Normalize date to start of day
-    const normalizedDate = new Date(date);
-    normalizedDate.setHours(0, 0, 0, 0);
-
-    await prisma.macroLog.delete({
-      where: { date: normalizedDate },
-    });
-
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Error deleting macro log:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete macro log', success: false },
+      { error: 'Failed to fetch meals', success: false },
       { status: 500 }
     );
   }

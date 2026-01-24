@@ -33,7 +33,10 @@ export async function GET(request: Request) {
 
     const macros = await prisma.macroLog.findMany({
       where,
-      orderBy: { date: 'desc' },
+      orderBy: [
+        { date: 'desc' },
+        { time: 'desc' }
+      ],
       take: limit ? parseInt(limit) : undefined,
     });
 
@@ -47,16 +50,23 @@ export async function GET(request: Request) {
   }
 }
 
-// POST /api/macros - Create or update macro log
+// POST /api/macros - Create a new meal entry
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { date, calories, protein, carbs, fats, notes } = body;
+    const { date, mealType, mealName, calories, protein, carbs, fats, notes } = body;
 
     // Validation
     if (!date) {
       return NextResponse.json(
         { error: 'Date is required', success: false },
+        { status: 400 }
+      );
+    }
+
+    if (!mealType) {
+      return NextResponse.json(
+        { error: 'Meal type is required', success: false },
         { status: 400 }
       );
     }
@@ -84,18 +94,13 @@ export async function POST(request: Request) {
     const normalizedDate = new Date(date);
     normalizedDate.setHours(0, 0, 0, 0);
 
-    // Upsert (create or update)
-    const macroLog = await prisma.macroLog.upsert({
-      where: { date: normalizedDate },
-      update: {
-        calories: parseInt(calories),
-        protein: parseFloat(protein),
-        carbs: parseFloat(carbs),
-        fats: parseFloat(fats),
-        notes: notes || null,
-      },
-      create: {
+    // Create new meal entry
+    const macroLog = await prisma.macroLog.create({
+      data: {
         date: normalizedDate,
+        time: new Date(), // current time
+        mealType,
+        mealName: mealName || null,
         calories: parseInt(calories),
         protein: parseFloat(protein),
         carbs: parseFloat(carbs),

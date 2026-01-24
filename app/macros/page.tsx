@@ -1,274 +1,395 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { MacroForm } from '@/components/macro/MacroForm';
-import { MacroProgressBar } from '@/components/macro/MacroProgressBar';
-import { MacroChart } from '@/components/macro/MacroChart';
 import { Button } from '@/components/ui/Button';
-import { format, subDays } from 'date-fns';
-import Link from 'next/link';
 import { useSettingsStore } from '@/lib/stores/settingsStore';
+import { format, startOfDay } from 'date-fns';
+import { Input } from '@/components/ui/Input';
 
-interface MacroLog {
+interface MacroEntry {
   id: number;
-  date: Date;
+  date: string;
+  time: string;
+  mealType: string;
+  mealName: string | null;
   calories: number;
   protein: number;
   carbs: number;
   fats: number;
-  notes?: string | null;
+  notes: string | null;
 }
 
-interface MacroStats {
-  count: number;
-  averages: {
-    calories: number;
-    protein: number;
-    carbs: number;
-    fats: number;
-  };
-  totals: {
-    calories: number;
-    protein: number;
-    carbs: number;
-    fats: number;
-  };
-  period: string;
-}
+const MEAL_TYPES = [
+  { value: 'BREAKFAST', label: 'Breakfast', icon: '🍳' },
+  { value: 'LUNCH', label: 'Lunch', icon: '🥗' },
+  { value: 'DINNER', label: 'Dinner', icon: '🍽️' },
+  { value: 'SNACK', label: 'Snacks', icon: '🍎' },
+];
 
 export default function MacrosPage() {
-  const [todaysMacros, setTodaysMacros] = useState<MacroLog | null>(null);
-  const [recentMacros, setRecentMacros] = useState<MacroLog[]>([]);
-  const [stats, setStats] = useState<MacroStats | null>(null);
-  const [chartPeriod, setChartPeriod] = useState<'7days' | '30days'>('7days');
+  const [selectedDate, setSelectedDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+  const [meals, setMeals] = useState<MacroEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showAddMeal, setShowAddMeal] = useState(false);
+  const [selectedMealType, setSelectedMealType] = useState('BREAKFAST');
 
-  // Get targets from settings store
+  // Form state
+  const [mealName, setMealName] = useState('');
+  const [calories, setCalories] = useState('');
+  const [protein, setProtein] = useState('');
+  const [carbs, setCarbs] = useState('');
+  const [fats, setFats] = useState('');
+
   const { macroTargets: targets } = useSettingsStore();
 
   useEffect(() => {
-    fetchData();
-  }, [chartPeriod]);
+    fetchMeals();
+  }, [selectedDate]);
 
-  async function fetchData() {
-    setLoading(true);
+  async function fetchMeals() {
     try {
-      // Fetch today's macros
-      const today = format(new Date(), 'yyyy-MM-dd');
-      const todayResponse = await fetch(`/api/macros/${today}`);
-      const todayResult = await todayResponse.json();
-      if (todayResult.success) {
-        setTodaysMacros(todayResult.data);
-      }
+      setLoading(true);
+      const date = new Date(selectedDate);
+      const startDate = startOfDay(date).toISOString();
+      const endDate = new Date(date.setHours(23, 59, 59, 999)).toISOString();
 
-      // Fetch recent macros for chart
-      const startDate = format(
-        subDays(new Date(), chartPeriod === '7days' ? 7 : 30),
-        'yyyy-MM-dd'
-      );
-      const endDate = format(new Date(), 'yyyy-MM-dd');
-      const recentResponse = await fetch(
-        `/api/macros?startDate=${startDate}&endDate=${endDate}`
-      );
-      const recentResult = await recentResponse.json();
-      if (recentResult.success) {
-        setRecentMacros(recentResult.data);
-      }
+      const response = await fetch(`/api/macros?startDate=${startDate}&endDate=${endDate}`);
+      const result = await response.json();
 
-      // Fetch stats
-      const statsResponse = await fetch(`/api/macros/stats?period=${chartPeriod}`);
-      const statsResult = await statsResponse.json();
-      if (statsResult.success) {
-        setStats(statsResult.data);
+      if (result.success) {
+        setMeals(result.data);
       }
     } catch (error) {
-      console.error('Error fetching macro data:', error);
+      console.error('Error fetching meals:', error);
     } finally {
       setLoading(false);
     }
   }
 
-  function handleMacroSaved() {
-    fetchData();
+  async function handleAddMeal() {
+    try {
+      const response = await fetch('/api/macros', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          date: selectedDate,
+          mealType: selectedMealType,
+          mealName: mealName || null,
+          calories: parseInt(calories) || 0,
+          protein: parseFloat(protein) || 0,
+          carbs: parseFloat(carbs) || 0,
+          fats: parseFloat(fats) || 0,
+        }),
+      });
+
+      if (response.ok) {
+        // Reset form
+        setMealName('');
+        setCalories('');
+        setProtein('');
+        setCarbs('');
+        setFats('');
+        setShowAddMeal(false);
+
+        // Refresh meals
+        fetchMeals();
+      }
+    } catch (error) {
+      console.error('Error adding meal:', error);
+    }
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-gray-600 dark:text-gray-400">Loading...</div>
-      </div>
-    );
+  async function handleDeleteMeal(id: number) {
+    if (!confirm('Delete this meal entry?')) return;
+
+    try {
+      const response = await fetch(`/api/macros/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        fetchMeals();
+      }
+    } catch (error) {
+      console.error('Error deleting meal:', error);
+    }
   }
+
+  // Calculate totals
+  const totals = meals.reduce(
+    (acc, meal) => ({
+      calories: acc.calories + meal.calories,
+      protein: acc.protein + meal.protein,
+      carbs: acc.carbs + meal.carbs,
+      fats: acc.fats + meal.fats,
+    }),
+    { calories: 0, protein: 0, carbs: 0, fats: 0 }
+  );
+
+  // Calculate remaining
+  const remaining = {
+    calories: targets.calories - totals.calories,
+    protein: targets.protein - totals.protein,
+    carbs: targets.carbs - totals.carbs,
+    fats: targets.fats - totals.fats,
+  };
+
+  // Group meals by type
+  const mealsByType = MEAL_TYPES.map((type) => ({
+    ...type,
+    meals: meals.filter((m) => m.mealType === type.value),
+    total: meals
+      .filter((m) => m.mealType === type.value)
+      .reduce((sum, m) => sum + m.calories, 0),
+  }));
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Macro Tracking</h1>
-        <Link href="/macros/history">
-          <Button variant="secondary">View History</Button>
-        </Link>
+    <div className="space-y-6 md:space-y-8">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+          Nutrition Diary
+        </h1>
+        <Input
+          type="date"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+          className="w-full md:w-auto"
+        />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Today's Entry Form */}
-        <Card>
+      {/* Daily Summary */}
+      <Card className="border-2 border-blue-500 dark:border-white">
+        <CardHeader>
+          <CardTitle>Daily Summary</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Calories */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-700 dark:text-white">Calories</span>
+              <span className="text-sm font-bold text-gray-900 dark:text-white">
+                {totals.calories} / {targets.calories}
+                <span className={remaining.calories >= 0 ? 'text-green-600 dark:text-green-400 ml-2' : 'text-red-600 dark:text-red-400 ml-2'}>
+                  ({remaining.calories >= 0 ? `${remaining.calories} left` : `${Math.abs(remaining.calories)} over`})
+                </span>
+              </span>
+            </div>
+            <div className="w-full bg-gray-200 dark:bg-zinc-800 rounded-full h-3">
+              <div
+                className={`h-3 rounded-full ${
+                  totals.calories <= targets.calories ? 'bg-green-500' : 'bg-red-500'
+                }`}
+                style={{ width: `${Math.min((totals.calories / targets.calories) * 100, 100)}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Macros Grid */}
+          <div className="grid grid-cols-3 gap-4">
+            {/* Protein */}
+            <div>
+              <div className="text-center mb-2">
+                <p className="text-xs text-gray-500 dark:text-zinc-400">Protein</p>
+                <p className="text-lg font-bold text-gray-900 dark:text-white">{Math.round(totals.protein)}g</p>
+                <p className="text-xs text-gray-500 dark:text-zinc-400">of {targets.protein}g</p>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-zinc-800 rounded-full h-2">
+                <div
+                  className="bg-blue-500 h-2 rounded-full"
+                  style={{ width: `${Math.min((totals.protein / targets.protein) * 100, 100)}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Carbs */}
+            <div>
+              <div className="text-center mb-2">
+                <p className="text-xs text-gray-500 dark:text-zinc-400">Carbs</p>
+                <p className="text-lg font-bold text-gray-900 dark:text-white">{Math.round(totals.carbs)}g</p>
+                <p className="text-xs text-gray-500 dark:text-zinc-400">of {targets.carbs}g</p>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-zinc-800 rounded-full h-2">
+                <div
+                  className="bg-yellow-500 h-2 rounded-full"
+                  style={{ width: `${Math.min((totals.carbs / targets.carbs) * 100, 100)}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Fats */}
+            <div>
+              <div className="text-center mb-2">
+                <p className="text-xs text-gray-500 dark:text-zinc-400">Fats</p>
+                <p className="text-lg font-bold text-gray-900 dark:text-white">{Math.round(totals.fats)}g</p>
+                <p className="text-xs text-gray-500 dark:text-zinc-400">of {targets.fats}g</p>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-zinc-800 rounded-full h-2">
+                <div
+                  className="bg-orange-500 h-2 rounded-full"
+                  style={{ width: `${Math.min((totals.fats / targets.fats) * 100, 100)}%` }}
+                />
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Meals by Type */}
+      {mealsByType.map((mealType) => (
+        <Card key={mealType.value}>
           <CardHeader>
-            <CardTitle>Today&apos;s Macros</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2">
+                <span className="text-2xl">{mealType.icon}</span>
+                {mealType.label}
+                <span className="text-sm font-normal text-gray-500 dark:text-zinc-400">
+                  ({mealType.total} cal)
+                </span>
+              </CardTitle>
+              <Button
+                size="sm"
+                onClick={() => {
+                  setSelectedMealType(mealType.value);
+                  setShowAddMeal(true);
+                }}
+              >
+                + Add
+              </Button>
+            </div>
           </CardHeader>
           <CardContent>
-            <MacroForm
-              initialData={todaysMacros ? {
-                calories: todaysMacros.calories,
-                protein: todaysMacros.protein,
-                carbs: todaysMacros.carbs,
-                fats: todaysMacros.fats,
-                notes: todaysMacros.notes || undefined
-              } : undefined}
-              onSuccess={handleMacroSaved}
-            />
-          </CardContent>
-        </Card>
-
-        {/* Progress Bars */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Daily Targets</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {todaysMacros ? (
-              <>
-                <MacroProgressBar
-                  label="Calories"
-                  current={todaysMacros.calories}
-                  target={targets.calories}
-                  unit="cal"
-                  color="purple"
-                />
-                <MacroProgressBar
-                  label="Protein"
-                  current={todaysMacros.protein}
-                  target={targets.protein}
-                  unit="g"
-                  color="red"
-                />
-                <MacroProgressBar
-                  label="Carbs"
-                  current={todaysMacros.carbs}
-                  target={targets.carbs}
-                  unit="g"
-                  color="blue"
-                />
-                <MacroProgressBar
-                  label="Fats"
-                  current={todaysMacros.fats}
-                  target={targets.fats}
-                  unit="g"
-                  color="yellow"
-                />
-              </>
+            {mealType.meals.length === 0 ? (
+              <p className="text-sm text-gray-500 dark:text-zinc-400 italic">No meals logged</p>
             ) : (
-              <div className="text-center py-8">
-                <p className="text-gray-500 dark:text-gray-400">
-                  No macros logged for today yet.
-                </p>
-                <p className="text-sm text-gray-400 dark:text-gray-500 mt-2">
-                  Fill out the form to track your progress.
-                </p>
+              <div className="space-y-3">
+                {mealType.meals.map((meal) => (
+                  <div
+                    key={meal.id}
+                    className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800"
+                  >
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-900 dark:text-white">
+                        {meal.mealName || 'Meal Entry'}
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-zinc-400">
+                        {meal.calories} cal • P: {Math.round(meal.protein)}g • C: {Math.round(meal.carbs)}g • F: {Math.round(meal.fats)}g
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-zinc-500">
+                        {format(new Date(meal.time), 'h:mm a')}
+                      </p>
+                    </div>
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={() => handleDeleteMeal(meal.id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                ))}
               </div>
             )}
           </CardContent>
         </Card>
-      </div>
+      ))}
 
-      {/* Stats Summary */}
-      {stats && stats.count > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              {chartPeriod === '7days' ? 'Last 7 Days' : 'Last 30 Days'} Summary
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-              <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Days Logged</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {stats.count}
-                </p>
+      {/* Add Meal Modal */}
+      {showAddMeal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Add Meal</CardTitle>
+                <button
+                  onClick={() => setShowAddMeal(false)}
+                  className="text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                >
+                  ✕
+                </button>
               </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Avg Calories</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {stats.averages.calories}
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Target: {targets.calories}
-                </p>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Meal Type
+                </label>
+                <select
+                  value={selectedMealType}
+                  onChange={(e) => setSelectedMealType(e.target.value)}
+                  className="w-full px-4 py-3 text-base border border-gray-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-white dark:bg-black dark:text-white min-h-[44px]"
+                >
+                  {MEAL_TYPES.map((type) => (
+                    <option key={type.value} value={type.value}>
+                      {type.icon} {type.label}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Avg Protein</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {stats.averages.protein}g
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Target: {targets.protein}g
-                </p>
+
+              <Input
+                label="Meal Name (optional)"
+                placeholder="e.g., Chicken Salad"
+                value={mealName}
+                onChange={(e) => setMealName(e.target.value)}
+              />
+
+              <Input
+                label="Calories"
+                type="number"
+                placeholder="0"
+                value={calories}
+                onChange={(e) => setCalories(e.target.value)}
+              />
+
+              <Input
+                label="Protein (g)"
+                type="number"
+                step="0.1"
+                placeholder="0"
+                value={protein}
+                onChange={(e) => setProtein(e.target.value)}
+              />
+
+              <Input
+                label="Carbs (g)"
+                type="number"
+                step="0.1"
+                placeholder="0"
+                value={carbs}
+                onChange={(e) => setCarbs(e.target.value)}
+              />
+
+              <Input
+                label="Fats (g)"
+                type="number"
+                step="0.1"
+                placeholder="0"
+                value={fats}
+                onChange={(e) => setFats(e.target.value)}
+              />
+
+              <div className="flex gap-3">
+                <Button
+                  variant="secondary"
+                  onClick={() => setShowAddMeal(false)}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleAddMeal}
+                  disabled={!calories || !protein || !carbs || !fats}
+                  className="flex-1"
+                >
+                  Add Meal
+                </Button>
               </div>
-              <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Avg Carbs</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {stats.averages.carbs}g
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Target: {targets.carbs}g
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Avg Fats</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {stats.averages.fats}g
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Target: {targets.fats}g</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       )}
-
-      {/* Macro Trends Chart */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Macro Trends</CardTitle>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setChartPeriod('7days')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  chartPeriod === '7days'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
-                }`}
-              >
-                7 Days
-              </button>
-              <button
-                onClick={() => setChartPeriod('30days')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  chartPeriod === '30days'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
-                }`}
-              >
-                30 Days
-              </button>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <MacroChart data={recentMacros} targets={targets} />
-        </CardContent>
-      </Card>
     </div>
   );
 }

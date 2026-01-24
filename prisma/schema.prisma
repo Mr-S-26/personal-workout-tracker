@@ -57,7 +57,10 @@ model Set {
 
 model MacroLog {
   id        Int      @id @default(autoincrement())
-  date      DateTime @unique  // prevent duplicate logs for same day
+  date      DateTime // date of the meal (no longer unique - multiple meals per day)
+  time      DateTime @default(now()) // exact time of logging
+  mealType  String   // BREAKFAST, LUNCH, DINNER, SNACK
+  mealName  String?  // optional meal name (e.g., "Chicken Salad", "Protein Shake")
   calories  Int
   protein   Float
   carbs     Float
