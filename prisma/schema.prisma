@@ -114,3 +114,15 @@ model RestTimerPreset {
   duration Int    // seconds
   order    Int    @default(0)
 }
+
+model FavoriteMeal {
+  id        Int      @id @default(autoincrement())
+  name      String   // e.g., "Chicken Breast", "Protein Shake"
+  mealType  String?  // optional default meal type (BREAKFAST, LUNCH, DINNER, SNACK)
+  calories  Int
+  protein   Float
+  carbs     Float
+  fats      Float
+  notes     String?
+  createdAt DateTime @default(now())
+}

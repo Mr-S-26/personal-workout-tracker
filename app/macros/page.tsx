@@ -20,6 +20,17 @@ interface MacroEntry {
   notes: string | null;
 }
 
+interface FavoriteMeal {
+  id: number;
+  name: string;
+  mealType: string | null;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fats: number;
+  notes: string | null;
+}
+
 const MEAL_TYPES = [
   { value: 'BREAKFAST', label: 'Breakfast', icon: '🍳' },
   { value: 'LUNCH', label: 'Lunch', icon: '🥗' },
@@ -30,8 +41,10 @@ const MEAL_TYPES = [
 export default function MacrosPage() {
   const [selectedDate, setSelectedDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [meals, setMeals] = useState<MacroEntry[]>([]);
+  const [favorites, setFavorites] = useState<FavoriteMeal[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddMeal, setShowAddMeal] = useState(false);
+  const [showFavorites, setShowFavorites] = useState(false);
   const [selectedMealType, setSelectedMealType] = useState('BREAKFAST');
 
   // Form state
@@ -40,11 +53,13 @@ export default function MacrosPage() {
   const [protein, setProtein] = useState('');
   const [carbs, setCarbs] = useState('');
   const [fats, setFats] = useState('');
+  const [saveToFavorites, setSaveToFavorites] = useState(false);
 
   const { macroTargets: targets } = useSettingsStore();
 
   useEffect(() => {
     fetchMeals();
+    fetchFavorites();
   }, [selectedDate]);
 
   async function fetchMeals() {
@@ -63,8 +78,22 @@ export default function MacrosPage() {
     }
   }
 
+  async function fetchFavorites() {
+    try {
+      const response = await fetch('/api/favorites');
+      const result = await response.json();
+
+      if (result.success) {
+        setFavorites(result.data);
+      }
+    } catch (error) {
+      console.error('Error fetching favorites:', error);
+    }
+  }
+
   async function handleAddMeal() {
     try {
+      // Add meal to diary
       const response = await fetch('/api/macros', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -80,12 +109,30 @@ export default function MacrosPage() {
       });
 
       if (response.ok) {
+        // Save to favorites if checkbox is checked
+        if (saveToFavorites && mealName) {
+          await fetch('/api/favorites', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: mealName,
+              mealType: selectedMealType,
+              calories: parseInt(calories) || 0,
+              protein: parseFloat(protein) || 0,
+              carbs: parseFloat(carbs) || 0,
+              fats: parseFloat(fats) || 0,
+            }),
+          });
+          fetchFavorites();
+        }
+
         // Reset form
         setMealName('');
         setCalories('');
         setProtein('');
         setCarbs('');
         setFats('');
+        setSaveToFavorites(false);
         setShowAddMeal(false);
 
         // Refresh meals
@@ -109,6 +156,47 @@ export default function MacrosPage() {
       }
     } catch (error) {
       console.error('Error deleting meal:', error);
+    }
+  }
+
+  async function handleAddFavoriteToDay(favorite: FavoriteMeal) {
+    try {
+      const response = await fetch('/api/macros', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          date: selectedDate,
+          mealType: favorite.mealType || 'SNACK',
+          mealName: favorite.name,
+          calories: favorite.calories,
+          protein: favorite.protein,
+          carbs: favorite.carbs,
+          fats: favorite.fats,
+        }),
+      });
+
+      if (response.ok) {
+        fetchMeals();
+        setShowFavorites(false);
+      }
+    } catch (error) {
+      console.error('Error adding favorite to day:', error);
+    }
+  }
+
+  async function handleDeleteFavorite(id: number) {
+    if (!confirm('Remove this favorite?')) return;
+
+    try {
+      const response = await fetch(`/api/favorites/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        fetchFavorites();
+      }
+    } catch (error) {
+      console.error('Error deleting favorite:', error);
     }
   }
 
@@ -147,12 +235,21 @@ export default function MacrosPage() {
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
           Nutrition Diary
         </h1>
-        <Input
-          type="date"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-          className="w-full md:w-auto"
-        />
+        <div className="flex items-center gap-3 w-full md:w-auto">
+          <Button
+            variant="secondary"
+            onClick={() => setShowFavorites(true)}
+            className="flex-1 md:flex-initial"
+          >
+            ⭐ Favorites ({favorites.length})
+          </Button>
+          <Input
+            type="date"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            className="flex-1 md:w-auto"
+          />
+        </div>
       </div>
 
       {/* Daily Summary */}
@@ -291,6 +388,63 @@ export default function MacrosPage() {
         </Card>
       ))}
 
+      {/* Favorites Modal */}
+      {showFavorites && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>⭐ Favorite Meals</CardTitle>
+                <button
+                  onClick={() => setShowFavorites(false)}
+                  className="text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                >
+                  ✕
+                </button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {favorites.length === 0 ? (
+                <p className="text-sm text-gray-500 dark:text-zinc-400 italic text-center py-8">
+                  No favorites yet. Add meals and check &quot;Save to favorites&quot; to create quick shortcuts.
+                </p>
+              ) : (
+                favorites.map((favorite) => (
+                  <div
+                    key={favorite.id}
+                    className="p-3 rounded-lg bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800"
+                  >
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-900 dark:text-white">
+                          {favorite.name}
+                        </p>
+                        <p className="text-sm text-gray-600 dark:text-zinc-400">
+                          {favorite.calories} cal • P: {Math.round(favorite.protein)}g • C: {Math.round(favorite.carbs)}g • F: {Math.round(favorite.fats)}g
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => handleDeleteFavorite(favorite.id)}
+                        className="text-red-600 dark:text-red-400 hover:text-red-700 text-sm"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={() => handleAddFavoriteToDay(favorite)}
+                      className="w-full"
+                    >
+                      + Add to Today
+                    </Button>
+                  </div>
+                ))
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       {/* Add Meal Modal */}
       {showAddMeal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
@@ -365,6 +519,25 @@ export default function MacrosPage() {
                 value={fats}
                 onChange={(e) => setFats(e.target.value)}
               />
+
+              {/* Save to Favorites */}
+              {mealName && (
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-blue-50 dark:bg-zinc-900 border border-blue-200 dark:border-blue-900">
+                  <input
+                    type="checkbox"
+                    id="saveToFavorites"
+                    checked={saveToFavorites}
+                    onChange={(e) => setSaveToFavorites(e.target.checked)}
+                    className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label
+                    htmlFor="saveToFavorites"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer"
+                  >
+                    ⭐ Save &quot;{mealName}&quot; to favorites
+                  </label>
+                </div>
+              )}
 
               <div className="flex gap-3">
                 <Button
