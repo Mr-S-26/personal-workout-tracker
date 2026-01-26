@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <rect width="192" height="192" fill="#000000"/>
+  <g fill="#FFFFFF">
+    <!-- Dumbbell icon -->
+    <rect x="36" y="88.49279999999999" width="120" height="15" rx="3"/>
+    <circle cx="36" cy="96" r="22.5"/>
+    <circle cx="156" cy="96" r="22.5"/>
+    <circle cx="36" cy="96" r="15" fill="#000000"/>
+    <circle cx="156" cy="96" r="15" fill="#000000"/>
+  </g>
+  <text x="96" y="150" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF" text-anchor="middle">WORKOUT</text>
+</svg>
