@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useSettingsStore } from '@/lib/stores/settingsStore';
-import { format, startOfDay } from 'date-fns';
+import { format } from 'date-fns';
 import { Input } from '@/components/ui/Input';
 
 interface MacroEntry {
@@ -50,11 +50,7 @@ export default function MacrosPage() {
   async function fetchMeals() {
     try {
       setLoading(true);
-      const date = new Date(selectedDate);
-      const startDate = startOfDay(date).toISOString();
-      const endDate = new Date(date.setHours(23, 59, 59, 999)).toISOString();
-
-      const response = await fetch(`/api/macros?startDate=${startDate}&endDate=${endDate}`);
+      const response = await fetch(`/api/macros?date=${selectedDate}`);
       const result = await response.json();
 
       if (result.success) {

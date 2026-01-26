@@ -1,16 +1,32 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// GET /api/macros - List all macro logs
+// GET /api/macros - List all macro logs (supports ?date=YYYY-MM-DD or ?startDate=&endDate=)
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
+    const date = searchParams.get('date');
     const startDate = searchParams.get('startDate');
     const endDate = searchParams.get('endDate');
     const limit = searchParams.get('limit');
 
     let where = {};
-    if (startDate && endDate) {
+
+    // If specific date is provided, get all meals for that day
+    if (date) {
+      const queryDate = new Date(date);
+      const startOfDay = new Date(queryDate);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(queryDate);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      where = {
+        date: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+      };
+    } else if (startDate && endDate) {
       where = {
         date: {
           gte: new Date(startDate),
@@ -35,7 +51,7 @@ export async function GET(request: Request) {
       where,
       orderBy: [
         { date: 'desc' },
-        { time: 'desc' }
+        { time: 'asc' }
       ],
       take: limit ? parseInt(limit) : undefined,
     });
