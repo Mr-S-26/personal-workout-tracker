@@ -31,7 +31,11 @@
 7. Left hand waist pounds: 15 sec
 8. Left hand shoulder pounds: 15 sec
 9. V-dribble (right hand): 15 sec
-10. V-dribble (left hand): 15 sec
+10. In and out dribble (right hand): 15 sec
+11. Side v-dribble (right hand): 15 sec
+12. V-dribble (left hand): 15 sec
+13. In and out dribble (left hand): 15 sec
+14. Side v-dribble (left hand): 15 sec
 
 ### Minutes 7-9: Ball Handling - Stationary Moves
 1. Front crossover: 15 reps
