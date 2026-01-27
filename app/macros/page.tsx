@@ -46,6 +46,7 @@ export default function MacrosPage() {
   const [showAddMeal, setShowAddMeal] = useState(false);
   const [showFavorites, setShowFavorites] = useState(false);
   const [selectedMealType, setSelectedMealType] = useState('BREAKFAST');
+  const [favoriteMealTypes, setFavoriteMealTypes] = useState<Record<number, string>>({});
 
   // Form state
   const [mealName, setMealName] = useState('');
@@ -161,12 +162,14 @@ export default function MacrosPage() {
 
   async function handleAddFavoriteToDay(favorite: FavoriteMeal) {
     try {
+      const selectedType = favoriteMealTypes[favorite.id] || favorite.mealType || 'BREAKFAST';
+
       const response = await fetch('/api/macros', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           date: selectedDate,
-          mealType: favorite.mealType || 'SNACK',
+          mealType: selectedType,
           mealName: favorite.name,
           calories: favorite.calories,
           protein: favorite.protein,
@@ -430,13 +433,26 @@ export default function MacrosPage() {
                         Remove
                       </button>
                     </div>
-                    <Button
-                      size="sm"
-                      onClick={() => handleAddFavoriteToDay(favorite)}
-                      className="w-full"
-                    >
-                      + Add to Today
-                    </Button>
+                    <div className="space-y-2">
+                      <select
+                        value={favoriteMealTypes[favorite.id] || favorite.mealType || 'BREAKFAST'}
+                        onChange={(e) => setFavoriteMealTypes(prev => ({ ...prev, [favorite.id]: e.target.value }))}
+                        className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-white dark:bg-zinc-900 dark:text-white"
+                      >
+                        {MEAL_TYPES.map((type) => (
+                          <option key={type.value} value={type.value}>
+                            {type.icon} {type.label}
+                          </option>
+                        ))}
+                      </select>
+                      <Button
+                        size="sm"
+                        onClick={() => handleAddFavoriteToDay(favorite)}
+                        className="w-full"
+                      >
+                        + Add to Today
+                      </Button>
+                    </div>
                   </div>
                 ))
               )}

@@ -7,6 +7,7 @@ import { useTimerStore } from '@/lib/stores/timerStore';
 import { ExerciseTracker } from './ExerciseTracker';
 import { Button } from '@/components/ui/Button';
 import { RestTimer } from '@/components/workout/RestTimer/RestTimer';
+import { AutoDrillTimer } from '@/components/workout/AutoDrillTimer';
 
 interface ActiveWorkoutProps {
   workoutId: number;
@@ -28,6 +29,20 @@ export function ActiveWorkout({ workoutId, workoutName, initialExercises }: Acti
   const [timerPresets, setTimerPresets] = useState<any[]>([]);
   const [showTimer, setShowTimer] = useState(true);
   const [lastCompletedSet, setLastCompletedSet] = useState<{ exerciseId: number; setId: number; time: number } | null>(null);
+  const [showAutoDrillTimer, setShowAutoDrillTimer] = useState(false);
+
+  // Detect ball handling drills (exercises with "sec" in targetReps or [BALL] in name)
+  const ballHandlingDrills = initialExercises.filter((ex) => {
+    const hasSecInReps = ex.targetReps && ex.targetReps.includes('sec');
+    const hasBallTag = ex.name && ex.name.includes('[BALL]');
+    return hasSecInReps || hasBallTag;
+  }).map((ex) => ({
+    id: ex.id,
+    name: ex.name.replace('[BALL]', '').trim(),
+    duration: 15, // 15 seconds per drill
+  }));
+
+  const isDailyWarmup = workoutName.toUpperCase().includes('WARM') || workoutName.toUpperCase().includes('DAILY');
 
   useEffect(() => {
     // Initialize workout in store if not already started
@@ -109,12 +124,40 @@ export function ActiveWorkout({ workoutId, workoutName, initialExercises }: Acti
     }
   };
 
+  const handleAutoDrillComplete = () => {
+    setShowAutoDrillTimer(false);
+    // Optionally mark all ball handling sets as completed
+    ballHandlingDrills.forEach((drill) => {
+      const exercise = exercises.find((ex) => ex.id === drill.id);
+      if (exercise) {
+        exercise.sets.forEach((set) => {
+          if (!set.completed) {
+            handleSetComplete(exercise.id, set.id, 1, 0); // Mark as done with dummy values
+          }
+        });
+      }
+    });
+  };
+
   const totalSets = exercises.reduce((sum, ex) => sum + ex.sets.length, 0);
   const completedSets = exercises.reduce(
     (sum, ex) => sum + ex.sets.filter((s) => s.completed).length,
     0
   );
   const progress = totalSets > 0 ? Math.round((completedSets / totalSets) * 100) : 0;
+
+  // Show auto-drill timer if active
+  if (showAutoDrillTimer && ballHandlingDrills.length > 0) {
+    return (
+      <div className="space-y-6">
+        <AutoDrillTimer
+          drills={ballHandlingDrills}
+          onComplete={handleAutoDrillComplete}
+          onExit={() => setShowAutoDrillTimer(false)}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -136,6 +179,15 @@ export function ActiveWorkout({ workoutId, workoutName, initialExercises }: Acti
             </div>
           </div>
           <div className="flex gap-2">
+            {isDailyWarmup && ballHandlingDrills.length > 0 && (
+              <Button
+                variant="primary"
+                onClick={() => setShowAutoDrillTimer(true)}
+                size="sm"
+              >
+                ⏱️ Auto Drills
+              </Button>
+            )}
             <Button
               variant="secondary"
               onClick={() => setShowTimer(!showTimer)}

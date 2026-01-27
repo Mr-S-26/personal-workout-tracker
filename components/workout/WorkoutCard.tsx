@@ -51,8 +51,15 @@ export function WorkoutCard({ workout, onDelete }: WorkoutCardProps) {
     <Card>
       <CardHeader>
         <div className="flex items-start justify-between">
-          <div>
-            <CardTitle>{workout.name}</CardTitle>
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              <CardTitle>{workout.name}</CardTitle>
+              {!workout.duration && (
+                <span className="px-2 py-1 text-xs font-medium bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded">
+                  In Progress
+                </span>
+              )}
+            </div>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               {format(new Date(workout.date), 'MMM d, yyyy • h:mm a')}
             </p>
@@ -88,11 +95,21 @@ export function WorkoutCard({ workout, onDelete }: WorkoutCardProps) {
           </div>
 
           <div className="flex gap-2">
-            <Link href={`/workouts/${workout.id}`} className="flex-1">
-              <Button variant="secondary" className="w-full">
-                View Details
-              </Button>
-            </Link>
+            {!workout.duration ? (
+              // Incomplete workout - show Resume button
+              <Link href={`/workouts/active/${workout.id}`} className="flex-1">
+                <Button variant="primary" className="w-full">
+                  Resume Workout
+                </Button>
+              </Link>
+            ) : (
+              // Completed workout - show View Details button
+              <Link href={`/workouts/${workout.id}`} className="flex-1">
+                <Button variant="secondary" className="w-full">
+                  View Details
+                </Button>
+              </Link>
+            )}
             {onDelete && (
               <Button
                 variant="danger"

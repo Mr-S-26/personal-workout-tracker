@@ -25,11 +25,13 @@
 1. Right hand ankle pounds (fingertips): 15 sec
 2. Right hand knee pounds: 15 sec
 3. Right hand waist pounds: 15 sec
-4. Left hand ankle pounds: 15 sec
-5. Left hand knee pounds: 15 sec
-6. Left hand waist pounds: 15 sec
-7. V-dribble (right hand): 15 sec
-8. V-dribble (left hand): 15 sec
+4. Right hand shoulder pounds: 15 sec
+5. Left hand ankle pounds: 15 sec
+6. Left hand knee pounds: 15 sec
+7. Left hand waist pounds: 15 sec
+8. Left hand shoulder pounds: 15 sec
+9. V-dribble (right hand): 15 sec
+10. V-dribble (left hand): 15 sec
 
 ### Minutes 7-9: Ball Handling - Stationary Moves
 1. Front crossover: 15 reps
