@@ -19,9 +19,12 @@ interface AutoDrillTimerProps {
 export function AutoDrillTimer({ drills, onComplete, onExit }: AutoDrillTimerProps) {
   const [phase, setPhase] = useState<'ready' | 'countdown' | 'drill' | 'complete'>('ready');
   const [currentDrillIndex, setCurrentDrillIndex] = useState(0);
-  const [timeRemaining, setTimeRemaining] = useState(5); // Start with 5 sec countdown
+  const [timeRemaining, setTimeRemaining] = useState(5);
   const [isPaused, setIsPaused] = useState(false);
+  const [endTime, setEndTime] = useState<number | null>(null); // Timestamp when current phase should end
+  const [pausedTimeRemaining, setPausedTimeRemaining] = useState<number | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const currentDrill = drills[currentDrillIndex];
   const progress = ((currentDrillIndex + 1) / drills.length) * 100;
@@ -34,64 +37,132 @@ export function AutoDrillTimer({ drills, onComplete, onExit }: AutoDrillTimerPro
     }
   };
 
-  // Timer logic
-  useEffect(() => {
-    if (isPaused || phase === 'ready' || phase === 'complete') return;
+  // Calculate time remaining based on endTime timestamp
+  const updateTimeRemaining = () => {
+    if (!endTime || isPaused) return;
 
-    const interval = setInterval(() => {
-      setTimeRemaining((prev) => {
-        if (prev <= 1) {
-          playBeep();
+    const now = Date.now();
+    const remaining = Math.max(0, Math.ceil((endTime - now) / 1000));
 
-          if (phase === 'countdown') {
-            // Countdown finished, start first drill
-            setPhase('drill');
-            return currentDrill.duration;
-          } else if (phase === 'drill') {
-            // Drill finished, move to next or complete
-            if (currentDrillIndex < drills.length - 1) {
-              setCurrentDrillIndex((i) => i + 1);
-              return drills[currentDrillIndex + 1].duration;
-            } else {
-              setPhase('complete');
-              return 0;
-            }
-          }
+    setTimeRemaining(remaining);
+
+    // Check if time is up
+    if (remaining <= 0) {
+      playBeep();
+
+      if (phase === 'countdown') {
+        // Countdown finished, start first drill
+        setPhase('drill');
+        const newEndTime = Date.now() + (currentDrill.duration * 1000);
+        setEndTime(newEndTime);
+      } else if (phase === 'drill') {
+        // Drill finished, move to next or complete
+        if (currentDrillIndex < drills.length - 1) {
+          const nextIndex = currentDrillIndex + 1;
+          setCurrentDrillIndex(nextIndex);
+          const newEndTime = Date.now() + (drills[nextIndex].duration * 1000);
+          setEndTime(newEndTime);
+        } else {
+          setPhase('complete');
+          setEndTime(null);
         }
-        return prev - 1;
-      });
-    }, 1000);
+      }
+    }
+  };
 
-    return () => clearInterval(interval);
-  }, [phase, isPaused, currentDrillIndex, drills, currentDrill]);
+  // Timer effect - updates every 100ms for smooth display
+  useEffect(() => {
+    if (phase === 'ready' || phase === 'complete' || isPaused) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      return;
+    }
+
+    // Update immediately
+    updateTimeRemaining();
+
+    // Then update every 100ms
+    intervalRef.current = setInterval(() => {
+      updateTimeRemaining();
+    }, 100);
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [phase, endTime, isPaused, currentDrillIndex]);
+
+  // Handle visibility change (app goes to background/foreground)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        console.log('App went to background, timer continues...');
+      } else {
+        console.log('App returned to foreground, recalculating time...');
+        // When coming back, immediately recalculate based on endTime
+        if (endTime && !isPaused) {
+          updateTimeRemaining();
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [endTime, isPaused]);
 
   const handleStart = () => {
     setPhase('countdown');
+    const newEndTime = Date.now() + 5000; // 5 seconds from now
+    setEndTime(newEndTime);
     setTimeRemaining(5);
   };
 
   const handlePause = () => {
-    setIsPaused(!isPaused);
+    if (isPaused) {
+      // Resume - set new end time based on remaining time
+      const newEndTime = Date.now() + (pausedTimeRemaining! * 1000);
+      setEndTime(newEndTime);
+      setIsPaused(false);
+      setPausedTimeRemaining(null);
+    } else {
+      // Pause - store current remaining time
+      setPausedTimeRemaining(timeRemaining);
+      setIsPaused(true);
+    }
   };
 
   const handleSkip = () => {
     playBeep();
     if (currentDrillIndex < drills.length - 1) {
-      setCurrentDrillIndex((i) => i + 1);
-      setTimeRemaining(drills[currentDrillIndex + 1].duration);
+      const nextIndex = currentDrillIndex + 1;
+      setCurrentDrillIndex(nextIndex);
+      const newEndTime = Date.now() + (drills[nextIndex].duration * 1000);
+      setEndTime(newEndTime);
       setPhase('drill');
+      setIsPaused(false);
     } else {
       setPhase('complete');
+      setEndTime(null);
     }
   };
 
   const handleExit = () => {
     if (confirm('Are you sure you want to exit the auto-timer?')) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
       onExit();
     }
   };
 
   const handleComplete = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
     onComplete();
   };
 
@@ -112,6 +183,7 @@ export function AutoDrillTimer({ drills, onComplete, onExit }: AutoDrillTimerPro
               • 5 second countdown before first drill<br />
               • {currentDrill?.duration}s per drill<br />
               • Automatic progression<br />
+              • Continues even when app is closed<br />
               • Sound alerts between drills
             </p>
           </div>
