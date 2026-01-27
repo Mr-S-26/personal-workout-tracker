@@ -31,18 +31,37 @@ export function ActiveWorkout({ workoutId, workoutName, initialExercises }: Acti
   const [lastCompletedSet, setLastCompletedSet] = useState<{ exerciseId: number; setId: number; time: number } | null>(null);
   const [showAutoDrillTimer, setShowAutoDrillTimer] = useState(false);
 
-  // Detect ball handling drills (exercises with "sec" in targetReps or [BALL] in name)
+  // Detect ball handling drills (exercises with "sec" in targetReps or warmup ball handling exercises)
   const ballHandlingDrills = initialExercises.filter((ex) => {
-    const hasSecInReps = ex.targetReps && ex.targetReps.includes('sec');
-    const hasBallTag = ex.name && ex.name.includes('[BALL]');
-    return hasSecInReps || hasBallTag;
+    const hasSecInReps = ex.targetReps && (
+      ex.targetReps.toLowerCase().includes('sec') ||
+      ex.targetReps.toLowerCase().includes('second')
+    );
+    const isBallHandling = ex.name && (
+      ex.name.toLowerCase().includes('pound') ||
+      ex.name.toLowerCase().includes('v-dribble') ||
+      ex.name.includes('[BALL]')
+    );
+    const isShootingOrJumping = ex.name && (
+      ex.name.toLowerCase().includes('jump') ||
+      ex.name.toLowerCase().includes('shot') ||
+      ex.name.toLowerCase().includes('air shot')
+    );
+    // Include if it has seconds AND is ball handling, but exclude jumping/shooting
+    return hasSecInReps && isBallHandling && !isShootingOrJumping;
   }).map((ex) => ({
     id: ex.id,
-    name: ex.name.replace('[BALL]', '').trim(),
+    name: ex.name.replace('Warm-up:', '').replace('[BALL]', '').trim(),
     duration: 15, // 15 seconds per drill
   }));
 
   const isDailyWarmup = workoutName.toUpperCase().includes('WARM') || workoutName.toUpperCase().includes('DAILY');
+
+  // Debug logging
+  console.log('Workout name:', workoutName);
+  console.log('Is daily warmup:', isDailyWarmup);
+  console.log('Ball handling drills found:', ballHandlingDrills.length);
+  console.log('Drills:', ballHandlingDrills);
 
   useEffect(() => {
     // Initialize workout in store if not already started
