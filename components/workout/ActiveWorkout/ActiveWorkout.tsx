@@ -27,7 +27,7 @@ export function ActiveWorkout({ workoutId, workoutName, initialExercises }: Acti
 
   const timerStore = useTimerStore();
   const [timerPresets, setTimerPresets] = useState<any[]>([]);
-  const [showTimer, setShowTimer] = useState(true);
+  const [showTimerModal, setShowTimerModal] = useState(false);
   const [lastCompletedSet, setLastCompletedSet] = useState<{ exerciseId: number; setId: number; time: number } | null>(null);
   const [showAutoDrillTimer, setShowAutoDrillTimer] = useState(false);
 
@@ -119,6 +119,9 @@ export function ActiveWorkout({ workoutId, workoutName, initialExercises }: Acti
     const defaultRestTime = timerPresets[2]?.duration || 90; // 90s preset
     timerStore.start(defaultRestTime, exerciseId, setId);
     setLastCompletedSet({ exerciseId, setId, time: Date.now() });
+
+    // Auto-open timer modal
+    setShowTimerModal(true);
   };
 
   const handleFinishWorkout = async () => {
@@ -209,10 +212,10 @@ export function ActiveWorkout({ workoutId, workoutName, initialExercises }: Acti
             )}
             <Button
               variant="secondary"
-              onClick={() => setShowTimer(!showTimer)}
+              onClick={() => setShowTimerModal(true)}
               size="sm"
             >
-              {showTimer ? 'Hide' : 'Show'} Timer
+              ⏱️ Rest Timer
             </Button>
             <Button
               variant="primary"
@@ -225,14 +228,22 @@ export function ActiveWorkout({ workoutId, workoutName, initialExercises }: Acti
         </div>
       </div>
 
-      {/* Rest Timer (collapsible) */}
-      {showTimer && (
-        <div className="lg:fixed lg:top-24 lg:right-8 lg:w-96 lg:z-10">
-          <RestTimer
-            presets={timerPresets}
-            exerciseId={timerStore.targetExerciseId || undefined}
-            setId={timerStore.targetSetId || undefined}
-          />
+      {/* Rest Timer Modal */}
+      {showTimerModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="relative w-full max-w-md">
+            <button
+              onClick={() => setShowTimerModal(false)}
+              className="absolute -top-2 -right-2 w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-zinc-600 z-10"
+            >
+              ✕
+            </button>
+            <RestTimer
+              presets={timerPresets}
+              exerciseId={timerStore.targetExerciseId || undefined}
+              setId={timerStore.targetSetId || undefined}
+            />
+          </div>
         </div>
       )}
 
