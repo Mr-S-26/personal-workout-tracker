@@ -6,8 +6,20 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get('limit') || '50');
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
+
+    // Build where clause for date filtering
+    const where: any = {};
+    if (startDate && endDate) {
+      where.date = {
+        gte: new Date(startDate),
+        lte: new Date(endDate),
+      };
+    }
 
     const workouts = await prisma.workout.findMany({
+      where,
       include: {
         exercises: {
           include: {
