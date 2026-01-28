@@ -105,7 +105,7 @@ All API routes follow consistent response format:
 
 **Workouts:**
 - `POST /api/workouts` - Create workout with nested exercises/sets
-- `GET /api/workouts` - List workouts with filters
+- `GET /api/workouts` - List workouts with filters and date range (supports ?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD)
 - `GET /api/workouts/[id]` - Get specific workout with exercises/sets
 - `POST /api/workouts/[id]/complete` - Mark workout complete, calculate duration
 - `PUT /api/workouts/[id]` - Update workout name and notes
@@ -141,11 +141,18 @@ All API routes follow consistent response format:
    - Survives navigation between pages
    - Triggers browser notifications and sound when complete
 
+3. `lib/stores/settingsStore.ts` - User settings state
+   - Macro targets (calories, protein, carbs, fats)
+   - Persists user preferences across sessions
+   - Storage key: `settings-storage`
+   - Includes refresh mechanism for PWA sync issues
+
 **Why Zustand over Context:**
 - Better performance (no whole-tree re-renders)
 - Built-in persistence middleware
 - Simpler API for complex state
 - Easier to debug
+- Reliable localStorage persistence (important for PWA)
 
 ### Component Organization
 
@@ -253,7 +260,8 @@ components/
   - Template instantiation copies target values to workout exercises
 
 - **Mobile-First Responsive Design**:
-  - Bottom tab navigation on mobile (fixed, 5 tabs with icons)
+  - Bottom tab navigation on mobile (fixed, 6 tabs with icons)
+  - Mobile nav: 🏠 Home, 📋 Templates, 💪 Workouts, 📅 Calendar, 🍎 Macros, ⚙️ Settings
   - All touch targets minimum 44px (iOS standard)
   - Buttons and inputs optimized for touch
   - Vertical stacking on small screens
@@ -267,6 +275,53 @@ components/
   - Dark mode toggle button (floating on mobile, nav on desktop)
   - Theme persistence in localStorage
   - Smooth theme transitions
+
+**Phase 10: Calendar View & PWA Enhancements** ✅
+- **Calendar View**:
+  - Monthly calendar grid showing all workout days
+  - Visual indicators: green for completed workouts, yellow for in-progress
+  - Click on workouts to view details or resume
+  - Month navigation (previous, next, today buttons)
+  - Summary statistics: completed workouts, total time, total volume
+  - Highlights current day with blue background
+  - Date range filtering in workouts API (startDate/endDate query params)
+  - Responsive design with mobile-optimized text sizes
+
+- **PWA Settings Sync**:
+  - Settings hydration check for proper localStorage loading
+  - "Refresh Settings" button to force reload from localStorage
+  - "Clear Cache" button to clear service worker caches and reload app
+  - Current values display showing actual stored settings
+  - Toast notifications for better user feedback
+  - Fixes sync issues between desktop and mobile PWA
+
+- **Navigation Improvements**:
+  - Settings added to mobile bottom navigation (6 items)
+  - Mobile nav: Home, Templates, Workouts, Calendar, Macros, Settings
+  - Desktop nav: All 6 main items + Reports + Personal Records + Theme toggle
+  - Reports moved to desktop-only (less frequently accessed on mobile)
+
+- **Auto-Drill Timer**:
+  - Automatic 15-second timer for ball handling drills
+  - 5-second countdown before first drill
+  - Auto-progression through all drills with sound alerts
+  - Pause, resume, skip controls
+  - Progress bar showing current drill position
+  - Timer continues running even when app is closed (timestamp-based)
+  - Page Visibility API for background/foreground detection
+
+- **Rest Timer Modal**:
+  - Auto-opens as modal popup after completing a set
+  - No need to scroll to find timer
+  - Close button (X) in top-right corner
+  - Default 90-second timer auto-starts
+  - Manual timer button (⏱️ Rest Timer) also available
+
+- **Workout Resume**:
+  - "In Progress" badge for incomplete workouts (no duration)
+  - "Resume Workout" button for incomplete workouts
+  - "View Details" button for completed workouts
+  - Prevents accidental workout loss
 
 **All Phases Complete!** 🎉
 
@@ -348,6 +403,11 @@ components/
 5. Weight inputs should show default weights as placeholders (e.g., "10kg", "7-8kg")
 6. Shooting drills should show makes/attempts inputs with percentage calculation
 7. Toggle dark/light mode with sun/moon button (floating on mobile, in nav on desktop)
+8. Click "Calendar" in navigation - Should see monthly calendar with workout days highlighted
+9. Click on a workout day to view details or resume incomplete workouts
+10. Navigate between months using Previous/Next buttons or jump to Today
+11. On mobile, verify 6 bottom nav items: Home, Templates, Workouts, Calendar, Macros, Settings
+12. On mobile Settings page, verify "Refresh Settings" and "Clear Cache" buttons are visible
 
 **Verify Database:**
 ```bash
@@ -387,6 +447,16 @@ ORDER BY te.order;
 ### Port Conflicts
 - Dev server may use port 3001 if 3000 is in use
 - Check `Local:` URL in terminal output
+
+### PWA Settings Sync Issues
+- Settings changed on desktop may not immediately reflect on mobile PWA
+- **Root cause**: Service worker caching and localStorage not syncing between browser contexts
+- **Solution**:
+  1. Go to Settings page on mobile
+  2. Click "🔄 Refresh Settings" button to force reload from localStorage
+  3. If that doesn't work, click "🗑️ Clear Cache" to clear service worker caches and reload
+- **Prevention**: Changes are saved to localStorage correctly, but PWA may serve cached JavaScript files
+- The "Clear Cache" button will clear all service worker caches and force reload the latest version
 
 ## File Patterns
 
@@ -479,13 +549,24 @@ const workouts = await prisma.workout.findMany({
   - Black & white theme with zinc palette
   - Preference saved in localStorage
 - **Mobile-first design**:
-  - Bottom navigation bar on mobile for easy thumb access
+  - Bottom navigation bar on mobile for easy thumb access (6 items)
+  - Mobile nav includes: Home, Templates, Workouts, Calendar, Macros, Settings
   - All touch targets 44px+ for comfortable tapping
   - Optimized primarily for phone use in the gym
   - Responsive breakpoints: `md:` 768px, `lg:` 1024px
 - **Shooting drill tracking**:
   - Makes/attempts format with automatic percentage calculation
   - Data stored in Set model (makes → reps, attempts → weight)
+- **Calendar view**:
+  - Monthly calendar showing workout history
+  - Visual indicators for completed and in-progress workouts
+  - Click on days to view/resume workouts
+  - Summary stats for the month
+- **PWA considerations**:
+  - Service worker may cache old JavaScript files
+  - Settings store uses localStorage with hydration checks
+  - "Clear Cache" functionality available in Settings to force reload
+  - Auto-drill timer uses timestamps to continue running when app is closed
 
 ## Resources
 
