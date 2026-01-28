@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
@@ -23,6 +23,17 @@ export default function SettingsPage() {
   const [fats, setFats] = useState(macroTargets.fats.toString());
   const [saved, setSaved] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Ensure Zustand store is hydrated from localStorage
+  useEffect(() => {
+    setIsHydrated(true);
+    // Sync form fields with store values after hydration
+    setCalories(macroTargets.calories.toString());
+    setProtein(macroTargets.protein.toString());
+    setCarbs(macroTargets.carbs.toString());
+    setFats(macroTargets.fats.toString());
+  }, [macroTargets]);
 
   function handleSave() {
     updateMacroTargets({
@@ -32,7 +43,40 @@ export default function SettingsPage() {
       fats: parseFloat(fats),
     });
     setSaved(true);
+    toast.success('Settings saved successfully!');
     setTimeout(() => setSaved(false), 3000);
+  }
+
+  function handleRefreshSettings() {
+    // Force reload from localStorage
+    const stored = localStorage.getItem('settings-storage');
+    if (stored) {
+      const data = JSON.parse(stored);
+      if (data.state?.macroTargets) {
+        setCalories(data.state.macroTargets.calories.toString());
+        setProtein(data.state.macroTargets.protein.toString());
+        setCarbs(data.state.macroTargets.carbs.toString());
+        setFats(data.state.macroTargets.fats.toString());
+        toast.success('Settings refreshed from storage');
+      }
+    } else {
+      toast.info('No saved settings found');
+    }
+  }
+
+  function handleClearCache() {
+    if (confirm('Clear app cache and reload? This will refresh all data.')) {
+      // Clear service worker caches
+      if ('caches' in window) {
+        caches.keys().then((names) => {
+          names.forEach((name) => {
+            caches.delete(name);
+          });
+        });
+      }
+      // Reload page
+      window.location.reload();
+    }
   }
 
   function handleReset() {
@@ -115,9 +159,18 @@ export default function SettingsPage() {
           <CardTitle>Macro Targets</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Set your daily macro targets. These will be used to track your progress in the Macros section.
-          </p>
+          <div className="flex items-start justify-between gap-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Set your daily macro targets. These will be used to track your progress in the Macros section.
+            </p>
+            {isHydrated && (
+              <div className="text-xs text-gray-500 dark:text-gray-400 text-right">
+                <p className="font-medium">Current values:</p>
+                <p>{macroTargets.protein}g protein</p>
+                <p>{macroTargets.calories} cal</p>
+              </div>
+            )}
+          </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -231,13 +284,26 @@ export default function SettingsPage() {
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-4">
-            <Button onClick={handleSave} variant="primary" className="flex-1">
-              Save Targets
-            </Button>
-            <Button onClick={handleReset} variant="secondary">
-              Reset to Defaults
-            </Button>
+          <div className="flex flex-col gap-3">
+            <div className="flex gap-4">
+              <Button onClick={handleSave} variant="primary" className="flex-1">
+                Save Targets
+              </Button>
+              <Button onClick={handleReset} variant="secondary">
+                Reset to Defaults
+              </Button>
+            </div>
+            <div className="flex gap-4">
+              <Button onClick={handleRefreshSettings} variant="secondary" className="flex-1">
+                🔄 Refresh Settings
+              </Button>
+              <Button onClick={handleClearCache} variant="secondary" className="flex-1">
+                🗑️ Clear Cache
+              </Button>
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              If settings aren't syncing between devices, try "Refresh Settings" first. If that doesn't work, use "Clear Cache" to force reload all app data.
+            </p>
           </div>
         </CardContent>
       </Card>
