@@ -10,7 +10,7 @@ const navItems = [
   { href: '/workouts', label: 'Workouts', icon: '💪' },
   { href: '/calendar', label: 'Calendar', icon: '📅' },
   { href: '/macros', label: 'Macros', icon: '🍎' },
-  { href: '/reports', label: 'Reports', icon: '📊' },
+  { href: '/settings', label: 'Settings', icon: '⚙️' },
 ];
 
 export function Navigation() {
@@ -106,6 +106,16 @@ export function Navigation() {
                 );
               })}
               <Link
+                href="/reports"
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  pathname === '/reports'
+                    ? 'bg-blue-600 text-white dark:bg-white dark:text-black'
+                    : 'text-gray-700 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-900'
+                }`}
+              >
+                Reports
+              </Link>
+              <Link
                 href="/personal-records"
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   pathname === '/personal-records'
@@ -114,16 +124,6 @@ export function Navigation() {
                 }`}
               >
                 PRs
-              </Link>
-              <Link
-                href="/settings"
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  pathname === '/settings'
-                    ? 'bg-blue-600 text-white dark:bg-white dark:text-black'
-                    : 'text-gray-700 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-900'
-                }`}
-              >
-                Settings
               </Link>
 
               {/* Theme Toggle - Desktop */}
