@@ -322,25 +322,25 @@
 ### ARMS SPECIALIZATION (40 min)
 
 **Superset 1 (4 rounds):**
-1. **EZ Bar Curls** - 12 reps (15-20kg bar)
-2. **Tricep Rope Pushdowns** - 15 reps (20kg)
+1. **EZ Bar Curls** - 4 x 12 (15-20kg bar)
+2. **Dumbbell Hammer Curls** - 4 x 12 (8-10kg)
    - Rest 60 sec between supersets
 
 **Superset 2 (4 rounds):**
-3. **Dumbbell Hammer Curls** - 12 reps (8-10kg)
-4. **Overhead Dumbbell Tricep Extension** - 12 reps (10-12kg)
+3. **Overhead Dumbbell Tricep Extension** - 4 x 12 (10-12kg)
+4. **Dumbbell Concentration Curls** - 4 x 12 each arm (8kg)
    - Rest 60 sec
 
-**Superset 3 (3 rounds):**
-5. **Cable Curls** - 15 reps (15kg)
-6. **Diamond Push-ups** - max reps (aim for 10+)
+**Superset 3 (4 rounds):**
+5. **Tricep Rope Pushdowns** - 4 x 15 (20kg)
+6. **Cable Curls** - 4 x 15 (15kg)
    - Rest 60 sec
 
 **Giant Set Finisher (2 rounds):**
-7. **Dumbbell Concentration Curls** - 12 each arm (8kg)
-8. **Bench Dips** - 15 reps
-9. **Dumbbell Curls (both arms)** - 10 reps (lighter weight, 5-6kg)
-10. **Close-Grip Push-ups** - max reps
+7. **Diamond Push-ups** - 2 x max (aim for 10+)
+8. **Bench Dips** - 2 x 15
+9. **Close-Grip Push-ups** - 2 x max
+10. **Regular Dumbbell Curls** - 2 x 10 (5-6kg light weight)
 
 ### MOBILITY & FOAM ROLLING (15 min)
 
