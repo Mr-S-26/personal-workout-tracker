@@ -75,7 +75,7 @@
 
 ## MONDAY - UPPER BODY PUSH + LOWER BODY POWER
 
-**Total Session Time: ~105 minutes**
+**Total Session Time: ~80 minutes**
 
 ### UPPER BODY - Chest/Shoulders/Triceps (40 min)
 
@@ -123,26 +123,6 @@
 
 4. **Wall Sit** - 3 x 45 sec
    - Builds quad endurance for shooting
-
-### BALL HANDLING - Movement Drills (5 min)
-
-**Full court or 20 feet back and forth:**
-1. Speed dribble (right hand): 2 trips
-2. Speed dribble (left hand): 2 trips
-3. Zigzag crossovers: 2 trips
-4. Retreat dribble: 2 trips
-
-### SHOOTING - Form Work (20 min)
-
-**Weeks 1-2 (Max distance: 12 feet):**
-1. **Form shooting (5 feet)**: 50 makes
-2. **Spot shooting (5 spots at 10 feet)**: 10 makes each spot (50 total)
-3. Focus: Consistent knee bend, same release point every time
-
-**Weeks 3-4 (Max distance: 17 feet):**
-1. **Form shooting (5 feet)**: 30 makes
-2. **Spot shooting (5 spots at 12-15 feet)**: 10 makes each spot (50 total)
-3. **Free throw line**: 20 makes
 
 ### Core Finisher (5 min)
 - Plank: 3 x 30-45 sec
