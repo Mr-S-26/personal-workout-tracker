@@ -92,6 +92,22 @@ function parseDailyWarmup(markdown: string) {
     });
   }
 
+  // Parse shooting drills (format: 1. **Name**: 50 makes)
+  const shootingPattern = /^\d+\.\s+\*\*(.+?)\*\*:\s*(\d+)\s*(makes?|attempts?)/gm;
+  while ((match = shootingPattern.exec(warmupContent)) !== null) {
+    const name = match[1].trim();
+    const value = match[2];
+    const unit = match[3];
+
+    exercises.push({
+      name: `[SHOOT] ${name}`,
+      order: order++,
+      targetSets: 1,
+      targetReps: `${value} ${unit}`,
+      notes: 'Shooting drill - warm-up',
+    });
+  }
+
   console.log(`Daily Warm-up: Found ${exercises.length} exercises`);
 
   return {
