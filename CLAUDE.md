@@ -70,11 +70,13 @@ npm run db:push
 - **Workout**: Main workout session with date, duration, notes
 - **Exercise**: Individual exercises within a workout with targetSets, targetReps, targetWeight (linked to workout)
 - **Set**: Individual sets within an exercise (reps, weight, RPE, rest time, completed status)
-- **MacroLog**: Daily macro tracking (calories, protein, carbs, fats) with unique date constraint
+- **MacroLog**: Daily macro tracking (calories, protein, carbs, fats) - multiple meals per day
 - **WorkoutTemplate**: Pre-defined workout routines
 - **TemplateExercise**: Exercises within templates with target sets/reps/weights
 - **PersonalRecord**: Track PRs by exercise name, weight, and reps
 - **RestTimerPreset**: Common rest timer durations (30s, 60s, 90s, 2min, 3min)
+- **FavoriteMeal**: Saved meals for quick macro logging
+- **ProgressPhoto**: Visual transformation tracking (base64 images with date, category, weight, notes)
 
 ### Important Relationships
 - Workout → Exercises → Sets (cascade delete enabled)
@@ -127,6 +129,11 @@ All API routes follow consistent response format:
 **Reports:**
 - `GET /api/reports/weekly?date=YYYY-MM-DD` - Weekly aggregated stats with comparisons
 - `GET /api/reports/monthly?date=YYYY-MM-DD` - Monthly aggregated stats with analytics
+
+**Progress Photos:**
+- `POST /api/progress-photos` - Upload new progress photo (base64 encoded)
+- `GET /api/progress-photos` - List photos with optional category/date filtering
+- `DELETE /api/progress-photos/[id]` - Delete progress photo
 
 ### State Management
 
@@ -260,8 +267,8 @@ components/
   - Template instantiation copies target values to workout exercises
 
 - **Mobile-First Responsive Design**:
-  - Bottom tab navigation on mobile (fixed, 6 tabs with icons)
-  - Mobile nav: 🏠 Home, 📋 Templates, 💪 Workouts, 📅 Calendar, 🍎 Macros, ⚙️ Settings
+  - Bottom tab navigation on mobile (fixed, 7 tabs with icons)
+  - Mobile nav: 🏠 Home, 📋 Templates, 💪 Workouts, 📅 Calendar, 🍎 Macros, 📸 Photos, ⚙️ Settings
   - All touch targets minimum 44px (iOS standard)
   - Buttons and inputs optimized for touch
   - Vertical stacking on small screens
@@ -296,9 +303,9 @@ components/
   - Fixes sync issues between desktop and mobile PWA
 
 - **Navigation Improvements**:
-  - Settings added to mobile bottom navigation (6 items)
-  - Mobile nav: Home, Templates, Workouts, Calendar, Macros, Settings
-  - Desktop nav: All 6 main items + Reports + Personal Records + Theme toggle
+  - Settings and Photos added to mobile bottom navigation (7 items)
+  - Mobile nav: Home, Templates, Workouts, Calendar, Macros, Photos, Settings
+  - Desktop nav: All 7 main items + Reports + Personal Records + Theme toggle
   - Reports moved to desktop-only (less frequently accessed on mobile)
 
 - **Auto-Drill Timer**:
@@ -323,6 +330,61 @@ components/
   - "View Details" button for completed workouts
   - Prevents accidental workout loss
 
+**Phase 11: Progress Photos & Workout Refinements** ✅
+- **Progress Photos**:
+  - Photo upload with camera/file input (mobile camera capture supported)
+  - Four categories: Front, Back, Side, Other
+  - Gallery grid view with filter by category
+  - Click to select photos for comparison (up to 4 at once)
+  - Side-by-side comparison modal with full details
+  - Optional weight and notes per photo
+  - Base64 storage in PostgreSQL
+  - 5MB file size limit with validation
+  - Track visual transformation over time
+  - Added to mobile navigation (📸 Photos)
+
+- **Daily Warm-up Enhanced** (23 exercises):
+  - 14 ball handling drills (15 sec each, auto timer)
+  - 4 stationary moves (reps)
+  - 5 shooting drills with makes/attempts tracking:
+    - 5ft Spot Shooting: 50 makes
+    - Short Mid-Range: 50 makes
+    - Mid-Range: 15 makes
+    - 3-Point Line: 15 makes
+    - Free Throws: 20 attempts
+  - Total: 130 target makes + 20 free throw attempts
+  - Removed jump rope and air shots
+
+- **Workout Template Updates**:
+  - Thursday: Complete redesign as Structured Game Simulation
+    - Block 1: 8 rounds of 45sec basketball movements (20 min)
+    - Block 2: 3 sets of 10 free throws with burpee penalties (15 min)
+    - Block 3: 3 rounds of 2-minute attack simulation (10 min)
+    - Total: 45 minutes of pure basketball conditioning
+
+  - Friday: Arms workout reorganization
+    - Superset 1: EZ Bar Curls + Hammer Curls (biceps focus)
+    - Superset 2: Overhead Tricep Ext + Concentration Curls (alternating)
+    - Superset 3: Tricep Pushdowns + Cable Curls (classic pairing)
+    - Giant Set: 3 tricep bodyweight + light bicep pump
+
+  - Monday: Simplified to pure strength/power
+    - Removed ball handling and shooting drills
+    - 12 exercises: 6 upper body, 4 lower body, 2 core
+    - Session reduced from ~105 min to ~80 min
+
+- **Free Throws Under Fatigue**:
+  - Added 20 free throw attempts to end of each main workout
+  - Monday, Tuesday, Wednesday, Friday: after core/finisher
+  - Thursday: already included (30 attempts with penalties)
+  - Builds mental toughness and shooting consistency when tired
+  - Track makes/attempts for FT% tracking
+
+- **Auto-Drill Timer Improvements**:
+  - Enhanced detection for "in-and-out" dribbles
+  - Recognizes variations: "in and out", "in-and-out", "side v"
+  - All 14 ball handling drills properly detected
+
 **All Phases Complete!** 🎉
 
 ## Important Files
@@ -337,14 +399,22 @@ components/
 ### Workout Template Parser
 `prisma/seed.ts` - Parses markdown workout routine into database templates
 - **Gym exercises**: `/^(\d+)\.\s+\*\*(.+?)\*\*\s+-\s+(.+?)$/gm` - Handles "4 x 10-12" format
-- **Ball handling drills**: `/^-?\s*(.+?):\s*(\d+)\s*(trips|sec|reps)/gm`
-- **Shooting drills**: `/^-?\s*\*?\*?(.+?):\s*(\d+)\s*(makes?|attempts?)/gmi`
+- **Ball handling drills**: `/^\d+\.\s+(.+?):\s+(\d+)\s+(sec|reps)/gm`
+- **Shooting drills**: `/^\d+\.\s+\*\*(.+?)\*\*:\s*(\d+)\s*(makes?|attempts?)/gm`
+  - Uses `matchAll()` to handle multiple SHOOTING sections per workout
+  - Parses all shooting sections (including free throws under fatigue)
 - **Conditioning work**: Parses intervals with work/rest periods
 - **Core exercises**: `/^-\s+(.+?):\s+(\d+)\s+x\s+(.+?)$/gm`
 - **Weight extraction**: Parses default weights from exercise descriptions (e.g., "10kg dumbbells", "Start with 20kg")
 - Extracts exercise name, sets, reps, and weights from workout-routine.md
 - Creates 6 templates: Daily Warm-up, Monday-Friday workouts
 - Prefixes exercises with type tags: [GYM], [BALL], [SHOOT], [COND], [CORE]
+- Daily Warm-up: 23 exercises (14 ball handling, 4 stationary, 5 shooting)
+- Monday: 13 exercises (6 upper, 4 lower, 2 core, 1 shooting)
+- Tuesday: 11 exercises (7 upper, 2 conditioning, 1 core, 1 shooting)
+- Wednesday: 11 exercises (6 lower, 4 abs, 1 shooting)
+- Thursday: 7 exercises (game simulation blocks)
+- Friday: 11 exercises (10 arms, 1 shooting)
 
 ### API Route Patterns
 - All routes in `app/api/**/route.ts` (App Router convention)
@@ -406,8 +476,11 @@ components/
 8. Click "Calendar" in navigation - Should see monthly calendar with workout days highlighted
 9. Click on a workout day to view details or resume incomplete workouts
 10. Navigate between months using Previous/Next buttons or jump to Today
-11. On mobile, verify 6 bottom nav items: Home, Templates, Workouts, Calendar, Macros, Settings
-12. On mobile Settings page, verify "Refresh Settings" and "Clear Cache" buttons are visible
+11. On mobile, verify 7 bottom nav items: Home, Templates, Workouts, Calendar, Macros, Photos, Settings
+12. Click "📸 Photos" - Upload progress photos with camera, view gallery, compare side-by-side
+13. Daily Warm-up: 23 exercises including 5 shooting drills (130 makes + 20 free throws)
+14. Click "⏱️ Auto Drills" in Daily Warm-up to start 14 ball handling drills timer
+15. All Monday-Friday workouts end with 20 free throws under fatigue (except Thursday has 30)
 
 **Verify Database:**
 ```bash
@@ -549,24 +622,38 @@ const workouts = await prisma.workout.findMany({
   - Black & white theme with zinc palette
   - Preference saved in localStorage
 - **Mobile-first design**:
-  - Bottom navigation bar on mobile for easy thumb access (6 items)
-  - Mobile nav includes: Home, Templates, Workouts, Calendar, Macros, Settings
+  - Bottom navigation bar on mobile for easy thumb access (7 items)
+  - Mobile nav includes: Home, Templates, Workouts, Calendar, Macros, Photos, Settings
   - All touch targets 44px+ for comfortable tapping
   - Optimized primarily for phone use in the gym
   - Responsive breakpoints: `md:` 768px, `lg:` 1024px
 - **Shooting drill tracking**:
   - Makes/attempts format with automatic percentage calculation
   - Data stored in Set model (makes → reps, attempts → weight)
+  - Daily Warm-up includes 130 target makes + 20 free throws
+  - All main workouts end with 20 free throws under fatigue
 - **Calendar view**:
   - Monthly calendar showing workout history
   - Visual indicators for completed and in-progress workouts
   - Click on days to view/resume workouts
   - Summary stats for the month
+- **Progress photos**:
+  - Base64 storage for simplicity (no external file storage needed)
+  - Mobile camera capture support
+  - Compare up to 4 photos side-by-side
+  - Track weight and notes per photo
 - **PWA considerations**:
   - Service worker may cache old JavaScript files
   - Settings store uses localStorage with hydration checks
   - "Clear Cache" functionality available in Settings to force reload
   - Auto-drill timer uses timestamps to continue running when app is closed
+- **Workout structure**:
+  - Daily Warm-up: 23 exercises (ball handling + shooting comprehensive)
+  - Monday: 13 exercises (pure strength/power, 80 min)
+  - Tuesday: 11 exercises (back/biceps + conditioning)
+  - Wednesday: 11 exercises (legs/abs + vertical jump)
+  - Thursday: 7 exercises (basketball game simulation, 45 min)
+  - Friday: 11 exercises (arms specialization)
 
 ## Resources
 
