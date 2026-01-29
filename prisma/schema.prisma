@@ -126,3 +126,16 @@ model FavoriteMeal {
   notes     String?
   createdAt DateTime @default(now())
 }
+
+model ProgressPhoto {
+  id        Int      @id @default(autoincrement())
+  date      DateTime @default(now())
+  category  String   // FRONT, BACK, SIDE, OTHER
+  photoData String   // base64 encoded image
+  weight    Float?   // optional body weight on this date
+  notes     String?
+  createdAt DateTime @default(now())
+
+  @@index([date])
+  @@index([category])
+}

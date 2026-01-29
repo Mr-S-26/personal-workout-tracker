@@ -116,6 +116,16 @@ export function Navigation() {
                 Reports
               </Link>
               <Link
+                href="/progress-photos"
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  pathname === '/progress-photos'
+                    ? 'bg-blue-600 text-white dark:bg-white dark:text-black'
+                    : 'text-gray-700 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-900'
+                }`}
+              >
+                📸 Photos
+              </Link>
+              <Link
                 href="/personal-records"
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   pathname === '/personal-records'
