@@ -43,7 +43,7 @@
 3. Behind-the-back: 15 reps
 4. Combo (crossover → between legs → behind back): 15 sec continuous
 
-### Minutes 10-25: Shooting Drills
+### Minutes 10-30: Shooting Drills
 **Track total makes and attempts for field goal percentage**
 
 1. **5ft Spot Shooting**: 50 makes
@@ -62,7 +62,11 @@
    - 5 makes each spot: right wing, middle, left wing
    - Track: makes/attempts
 
-**Total Target: 130 makes**
+5. **Free Throws**: 20 attempts
+   - Shoot 20 free throws
+   - Track: makes/attempts (e.g., 15/20 = 75%)
+
+**Total Target: 130 makes + 20 free throw attempts**
 
 ### Ready to Train
 - All done with warm-up, ready to start main workout
