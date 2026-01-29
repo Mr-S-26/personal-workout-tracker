@@ -267,58 +267,51 @@
 
 ---
 
-## THURSDAY - FULL BODY CONDITIONING + GAME SIMULATION
+## THURSDAY - STRUCTURED GAME SIMULATION
 
-**Total Session Time: ~95 minutes**
+**Total Session Time: ~45 minutes**
 
-**This day is CRITICAL for your 5-minute cardio problem**
+**This day is CRITICAL for game conditioning and shooting under fatigue**
 
-### FULL BODY METABOLIC CIRCUIT (30 min)
+### Block 1: Continuous Basketball Movements (20 min)
 
-**Circuit (Repeat 4 rounds):**
-1. **Kettlebell Swings (or Dumbbell)** - 15 reps (12-16kg)
-2. **Push-ups** - 10 reps
-3. **Goblet Squats** - 12 reps (16kg)
-4. **Dumbbell Rows** - 10 each arm (10kg)
-5. **Jumping Jacks** - 30 reps
-6. **Plank Hold** - 30 sec
+1. **3pt Line Movement Drill** - 8 x 45sec
+   - 45sec WORK: 3pt line → crossover → mid-range shot → rebound → dribble out → drive → repeat
+   - 90sec REST: Walk, dribble slowly, breathe
+   - Why: Work:rest ratio builds aerobic base, 8 rounds = real conditioning
 
-Rest 90-120 sec between rounds
+### Block 2: Free Throw Fatigue Training (15 min)
 
-### BASKETBALL HIGH-INTENSITY INTERVALS (35 min)
+2. **Free Throw Set 1** - 10 attempts
+   - Track makes (goal: 7+ makes)
+   - IF 7+ makes: Rest 2 min
+   - IF less than 7: Do 5 burpees first
 
-**Block 1 - Building Your Engine (20 min):**
-- **Work: 45 sec** continuous movement (dribbling, layups, defensive slides)
-- **Rest: 90 sec** active recovery (walking)
-- Repeat 8 rounds
-- This work:rest ratio will improve your conditioning fast
+3. **Free Throw Set 2** - 10 attempts
+   - Track makes (goal: 7+ makes)
+   - IF 7+ makes: Rest 2 min
+   - IF less than 7: Do 5 burpees first
 
-**Block 2 - Game Simulation (15 min):**
-- **2 min continuous:** Attack rim → rebound → dribble out → shoot mid-range → repeat
-- **Rest: 2 min**
-- Repeat 3x
-- **Shooting during this:** Track makes vs attempts
+4. **Free Throw Set 3** - 10 attempts
+   - Track makes (goal: 7+ makes)
+   - Total: 30 free throws to track improvement
 
-### BALL HANDLING - Under Fatigue (5 min)
+### Block 3: Game Simulation (10 min)
 
-**While breathing hard from conditioning:**
-1. Stationary pounds (both hands): 30 sec
-2. Crossovers: 20 reps
-3. Between-legs: 20 reps
-4. Behind-back: 20 reps
-5. Combo moves: 90 sec continuous
+5. **Attack Simulation Round 1** - 1 x 2min
+   - 2min continuous: Attack → shoot → rebound → dribble out → repeat
+   - Track total makes during round
+   - Rest: 2 min
 
-**This builds handles under game fatigue**
+6. **Attack Simulation Round 2** - 1 x 2min
+   - 2min continuous: Attack → shoot → rebound → dribble out → repeat
+   - Track total makes during round
+   - Rest: 2 min
 
-### SHOOTING - Fatigue Test (10 min)
-
-**After Block 2, immediately:**
-- Shoot 20 free throws
-- Track your percentage - goal is 70%+ even when exhausted
-
-### Core Finisher (5 min)
-- Hanging knee raises: 3 x 10 (or lying if you can't hang)
-- Pallof press: 3 x 10 each side
+7. **Attack Simulation Round 3** - 1 x 2min
+   - 2min continuous: Attack → shoot → rebound → dribble out → repeat
+   - Track total makes during round
+   - Goal: Maintain shooting percentage even in round 3
 
 ---
 
