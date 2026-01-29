@@ -40,6 +40,9 @@ export function ActiveWorkout({ workoutId, workoutName, initialExercises }: Acti
     const isBallHandling = ex.name && (
       ex.name.toLowerCase().includes('pound') ||
       ex.name.toLowerCase().includes('v-dribble') ||
+      ex.name.toLowerCase().includes('in and out') ||
+      ex.name.toLowerCase().includes('in-and-out') ||
+      ex.name.toLowerCase().includes('side v') ||
       ex.name.includes('[BALL]')
     );
     const isShootingOrJumping = ex.name && (

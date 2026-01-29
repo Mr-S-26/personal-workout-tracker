@@ -43,10 +43,8 @@
 3. Behind-the-back: 15 reps
 4. Combo (crossover → between legs → behind back): 15 sec continuous
 
-### Minute 10: Shooting Prep
-- Jump rope: 2 x 1 min (or jumping jacks) - Monday/Wednesday/Thursday
-- 10 air shots (shooting motion) - All days
-- Ready to train
+### Ready to Train
+- All done with warm-up, ready to start main workout
 
 ---
 

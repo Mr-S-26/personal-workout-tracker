@@ -92,23 +92,6 @@ function parseDailyWarmup(markdown: string) {
     });
   }
 
-  // Add shooting prep
-  exercises.push({
-    name: 'Warm-up: Jump rope or jumping jacks',
-    order: order++,
-    targetSets: 2,
-    targetReps: '1 min',
-    notes: 'Monday/Wednesday/Thursday',
-  });
-
-  exercises.push({
-    name: 'Warm-up: Air shots (shooting motion)',
-    order: order++,
-    targetSets: 1,
-    targetReps: '10 reps',
-    notes: 'All days',
-  });
-
   console.log(`Daily Warm-up: Found ${exercises.length} exercises`);
 
   return {
