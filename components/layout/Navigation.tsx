@@ -10,6 +10,7 @@ const navItems = [
   { href: '/workouts', label: 'Workouts', icon: '💪' },
   { href: '/calendar', label: 'Calendar', icon: '📅' },
   { href: '/macros', label: 'Macros', icon: '🍎' },
+  { href: '/progress-photos', label: 'Photos', icon: '📸' },
   { href: '/settings', label: 'Settings', icon: '⚙️' },
 ];
 
@@ -57,7 +58,7 @@ export function Navigation() {
 
       {/* Mobile Bottom Navigation */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-black border-t border-gray-200 dark:border-zinc-800 z-50 safe-area-bottom">
-        <div className="grid grid-cols-6 h-16">
+        <div className="grid grid-cols-7 h-16">
           {navItems.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
             return (
@@ -114,16 +115,6 @@ export function Navigation() {
                 }`}
               >
                 Reports
-              </Link>
-              <Link
-                href="/progress-photos"
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  pathname === '/progress-photos'
-                    ? 'bg-blue-600 text-white dark:bg-white dark:text-black'
-                    : 'text-gray-700 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-900'
-                }`}
-              >
-                📸 Photos
               </Link>
               <Link
                 href="/personal-records"
