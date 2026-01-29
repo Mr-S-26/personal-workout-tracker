@@ -128,6 +128,11 @@
 - Plank: 3 x 30-45 sec
 - Lying leg raises: 3 x 12
 
+### SHOOTING - Free Throws Under Fatigue (5 min)
+- **Free Throws**: 20 attempts
+- Track: makes/attempts (e.g., 14/20 = 70%)
+- Goal: Practice shooting while fatigued from workout
+
 ---
 
 ## TUESDAY - BACK/BICEPS + AEROBIC CONDITIONING
@@ -195,6 +200,11 @@
 ### Core (5 min)
 - Russian twists: 3 x 20
 - Dead bugs: 3 x 10
+
+### SHOOTING - Free Throws Under Fatigue (5 min)
+- **Free Throws**: 20 attempts
+- Track: makes/attempts (e.g., 14/20 = 70%)
+- Goal: Practice shooting while fatigued from workout
 
 ---
 
@@ -267,6 +277,11 @@
 
 **Weeks 3-4 (Max distance: 17 feet):**
 - Off-the-dribble shots from 3 spots (12-15 feet): 50 total makes
+
+### SHOOTING - Free Throws Under Fatigue (5 min)
+- **Free Throws**: 20 attempts
+- Track: makes/attempts (e.g., 14/20 = 70%)
+- Goal: Practice shooting while fatigued from workout
 
 ---
 
@@ -414,6 +429,11 @@
 - Sit quietly
 - Visualize perfect shooting form
 - Mental rehearsal
+
+### SHOOTING - Free Throws Under Fatigue (5 min)
+- **Free Throws**: 20 attempts
+- Track: makes/attempts (e.g., 14/20 = 70%)
+- Goal: Practice shooting while fatigued from workout
 
 ---
 

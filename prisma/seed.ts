@@ -273,11 +273,18 @@ function parseShootingDrills(content: string, startOrder: number, day: string): 
   const exercises: ParsedExercise[] = [];
   let order = startOrder;
 
-  // Look for shooting sections
-  const shootingSection = content.match(/### SHOOTING[\s\S]*?(?=###|$)/);
-  if (!shootingSection) return exercises;
+  // Look for ALL shooting sections (using matchAll to get multiple matches)
+  const shootingSections = content.matchAll(/### SHOOTING[\s\S]*?(?=###|$)/g);
+  const allSections: string[] = [];
 
-  const section = shootingSection[0];
+  for (const match of shootingSections) {
+    allSections.push(match[0]);
+  }
+
+  if (allSections.length === 0) return exercises;
+
+  // Parse all shooting sections combined
+  const section = allSections.join('\n');
 
   // Parse shooting drills like "Form shooting (5 feet): 50 makes"
   const shootingPattern = /^-?\s*\*?\*?(.+?):\s*(\d+)\s*(makes?|attempts?)/gmi;
