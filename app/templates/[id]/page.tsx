@@ -42,10 +42,12 @@ export default function TemplateDetailPage({
 
   async function fetchTemplate() {
     try {
+      console.log('🔍 Fetching template with ID:', resolvedParams.id);
       const response = await fetch(`/api/templates/${resolvedParams.id}`);
       const result = await response.json();
 
       if (result.success) {
+        console.log('✅ Template fetched:', result.data.name, 'ID:', result.data.id, 'Exercises:', result.data.exercises.length);
         setTemplate(result.data);
       } else {
         setError(result.error || 'Failed to fetch template');
@@ -61,6 +63,7 @@ export default function TemplateDetailPage({
   async function handleStartWorkout() {
     if (!template) return;
 
+    console.log('🏋️ Starting workout from template:', template.name, 'ID:', template.id);
     setStarting(true);
     try {
       const response = await fetch(`/api/templates/${template.id}/instantiate`, {
@@ -70,6 +73,7 @@ export default function TemplateDetailPage({
       const result = await response.json();
 
       if (result.success) {
+        console.log('✅ Workout created:', result.data.name, 'Exercises:', result.data.exercises?.length);
         // Navigate to active workout page
         router.push(`/workouts/active/${result.data.id}`);
       } else {
@@ -112,6 +116,11 @@ export default function TemplateDetailPage({
   }
 
   // Group exercises by type
+  console.log('🎨 RENDERING TEMPLATE:', template.name, 'ID:', template.id);
+  console.log('🎨 Total exercises in state:', template.exercises.length);
+  console.log('🎨 First exercise:', template.exercises[0]?.name);
+  console.log('🎨 Last exercise:', template.exercises[template.exercises.length - 1]?.name);
+
   const gymExercises = template.exercises.filter((e) => e.name.includes('[GYM]'));
   const ballHandlingExercises = template.exercises.filter((e) => e.name.includes('[BALL]'));
   const shootingExercises = template.exercises.filter((e) => e.name.includes('[SHOOT]'));
@@ -120,6 +129,15 @@ export default function TemplateDetailPage({
   const warmupExercises = template.exercises.filter(
     (e) => e.name.includes('Warm-up') && !e.name.includes('[')
   );
+
+  console.log('🎨 Grouped exercises:', {
+    gym: gymExercises.length,
+    ball: ballHandlingExercises.length,
+    shooting: shootingExercises.length,
+    conditioning: conditioningExercises.length,
+    core: coreExercises.length,
+    warmup: warmupExercises.length
+  });
 
   return (
     <div className="space-y-6">

@@ -36,6 +36,12 @@ export default async function ActiveWorkoutPage({
     notFound();
   }
 
+  console.log('💪 ACTIVE WORKOUT PAGE - Workout ID:', workoutId);
+  console.log('💪 Workout Name:', workout.name);
+  console.log('💪 Template ID:', workout.templateId);
+  console.log('💪 Number of exercises:', workout.exercises.length);
+  console.log('💪 First 3 exercises:', workout.exercises.slice(0, 3).map(e => e.name));
+
   // Transform exercises to include target info
   const exercises = workout.exercises.map((exercise) => {
     return {

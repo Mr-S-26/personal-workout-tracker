@@ -18,6 +18,7 @@ interface ActiveWorkoutProps {
 export function ActiveWorkout({ workoutId, workoutName, initialExercises }: ActiveWorkoutProps) {
   const router = useRouter();
   const {
+    workoutId: storeWorkoutId,
     exercises,
     startWorkout,
     updateSet,
@@ -67,14 +68,17 @@ export function ActiveWorkout({ workoutId, workoutName, initialExercises }: Acti
   console.log('Drills:', ballHandlingDrills);
 
   useEffect(() => {
-    // Initialize workout in store if not already started
-    if (exercises.length === 0) {
+    // Initialize workout in store if not already started OR if it's a different workout
+    if (exercises.length === 0 || storeWorkoutId !== workoutId) {
+      console.log('🔄 Initializing workout - Store ID:', storeWorkoutId, 'New ID:', workoutId);
       startWorkout(workoutId, workoutName, initialExercises);
+    } else {
+      console.log('✅ Using existing workout from store - ID:', storeWorkoutId);
     }
 
     // Fetch timer presets
     fetchTimerPresets();
-  }, []);
+  }, [workoutId]);
 
   async function fetchTimerPresets() {
     try {

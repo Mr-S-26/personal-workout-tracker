@@ -10,6 +10,8 @@ export async function POST(
     const { id } = await params;
     const templateId = parseInt(id);
 
+    console.log('📋 Instantiate endpoint called with ID:', templateId);
+
     // Get the template with exercises
     const template = await prisma.workoutTemplate.findUnique({
       where: { id: templateId },
@@ -21,11 +23,15 @@ export async function POST(
     });
 
     if (!template) {
+      console.log('❌ Template not found with ID:', templateId);
       return NextResponse.json(
         { error: 'Template not found', success: false },
         { status: 404 }
       );
     }
+
+    console.log('✅ Template found:', template.name, 'with', template.exercises.length, 'exercises');
+    console.log('First 3 exercises:', template.exercises.slice(0, 3).map(e => e.name));
 
     // Create workout from template
     const workout = await prisma.workout.create({
@@ -61,6 +67,8 @@ export async function POST(
         },
       },
     });
+
+    console.log('🏋️ Workout created:', workout.name, 'with', workout.exercises.length, 'exercises');
 
     return NextResponse.json({ data: workout, success: true });
   } catch (error) {
